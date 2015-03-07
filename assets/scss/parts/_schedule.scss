@@ -1,0 +1,24 @@
+.schedule {
+	height: 42px;
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	color: white;
+	background-color: #202022;
+	&__label {
+		display: inline-block;
+		width: 260px;
+		padding: 10px;
+		padding-left: 20px;
+		background-color: #424244;
+		font-weight: bold;
+		text-transform: uppercase;
+		text-align: right;
+	}
+	&__event {
+		display: inline-block;
+		padding: 10px;
+		padding-right: 20px;
+	}
+}
