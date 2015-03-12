@@ -27,11 +27,11 @@
 		margin-bottom: 0;
 	}
 	&__avatar {
-		width: 50px;
+		width: 48px;
 		float: left;
 	}
 	&__container {
-		margin-left: 55px;
+		margin-left: 53px;
 		position: relative;
 		&:before {
 			content: "";
@@ -48,7 +48,7 @@
 	}
 	&__body {
 		display: inline-block;
-		min-height: 50px;
+		min-height: 48px;
 		padding: 10px;
 		background-color: white;
 	}

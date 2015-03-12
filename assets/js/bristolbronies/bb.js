@@ -9,25 +9,46 @@ var bb = {
 };
 
 bb.tweetstream = {
+	loadedTweets: [],
 	init: function() {
 		bb.tweetstream.checkForUpdate();
-		setInterval(bb.tweetstream.checkForUpdate, 10000); // 10 seconds
+		setInterval(bb.tweetstream.checkForUpdate, 30000); // 30 seconds
 	},
 	checkForUpdate: function() {
 		var template = $("#tmpl-tweet").html();
 		bb.log("Tweetstream", "Checking for updates...");
 		Mustache.parse(template);
-
-		var viewModel = {
-			"user": "bristolbronies",
-			"avatar": "http://placeponi.es/50/50",
-			"time": "2015-04-04T11:00:00",
-			"content": "Some words go here! Ha ha! " + Math.random()
-		};
-		var rendered = Mustache.render(template, viewModel);
-		$(".js-tweetstream").prepend(rendered);
-		bb.log("Tweetstream", "New tweets added!");
-
+		$.ajax({
+			dataType: "json",
+			cache: false,
+			url: "/service/tweets.php"
+			//url: "/service/tweets_debug.json"
+		}).done(function(data) {
+			var $tweetstream = $(".js-tweetstream"),
+			    rendered = "";
+			$.each(data.tweets, function(index, tweet) {
+				if($.inArray(tweet.id, bb.tweetstream.loadedTweets) <= -1) {
+					bb.tweetstream.loadedTweets.push(tweet.id);
+					rendered += Mustache.render(template, tweet);
+					bb.log("Tweetstream", "Tweets inserted!");
+				}
+				else {
+					bb.log("Tweetstream", "No more tweets to speak of.");
+					return false;
+				}
+			});
+			$tweetstream.prepend(rendered);
+			$tweetstream.children().each(function(index, element) {
+				if(index <= 4) {
+					$(element).find("[data-timeago]").timeago();
+				}
+				if(index > 4) { // max out at 5
+					$(element).remove();
+				}
+			});
+		}).fail(function() {
+			bb.log("Tweetstream", "Loading failed.");
+		});
 	}
 };
 
@@ -45,7 +66,7 @@ bb.schedule = {
 		$.ajax({
 			dataType: "json",
 			cache: false,
-			url: "/config/schedule.json"
+			url: "/service/schedule.json"
 		}).done(function(data) {
 			$.each(data.schedule, function(index, event) {
 				if(event.timestamp > timeNow) {
@@ -60,13 +81,13 @@ bb.schedule = {
 						return false;
 					}
 					else {
-						bb.log("Schedule", "Event doesn't need updating.")
+						bb.log("Schedule", "Event doesn't need updating.");
 						return false;
 					}
 				}
 			});
 		}).fail(function() {
-			console.log("FAILURE");
+			bb.log("Schedule", "Loading failed.");
 		});
 	}
 };
