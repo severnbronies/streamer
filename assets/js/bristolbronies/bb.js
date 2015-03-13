@@ -12,7 +12,7 @@ bb.tweetstream = {
 	loadedTweets: [],
 	init: function() {
 		bb.tweetstream.checkForUpdate();
-		setInterval(bb.tweetstream.checkForUpdate, 5000); // 30 seconds
+		setInterval(bb.tweetstream.checkForUpdate, 30000); // 30 seconds
 	},
 	checkForUpdate: function() {
 		var template = $("#tmpl-tweet").html();
