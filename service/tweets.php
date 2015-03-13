@@ -22,7 +22,8 @@
 	// Output
 	$output = "";
 	foreach($data->statuses as $status) {
-		if($status->retweeted_status === null) { 
+		$retweeted = !empty($status->retweeted_status) ? $status->retweeted_status : false;
+		if(!$retweeted) { 
 			$output[] = array(
 				"id" => $status->id_str,
 				"time" => date("c", strtotime($status->created_at)),

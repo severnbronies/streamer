@@ -12,7 +12,7 @@ bb.tweetstream = {
 	loadedTweets: [],
 	init: function() {
 		bb.tweetstream.checkForUpdate();
-		setInterval(bb.tweetstream.checkForUpdate, 30000); // 30 seconds
+		setInterval(bb.tweetstream.checkForUpdate, 5000); // 30 seconds
 	},
 	checkForUpdate: function() {
 		var template = $("#tmpl-tweet").html();
@@ -37,13 +37,14 @@ bb.tweetstream = {
 					return false;
 				}
 			});
-			$tweetstream.prepend(rendered);
+			$tweetstream.prepend($(rendered).hide().fadeIn());
 			$tweetstream.children().each(function(index, element) {
-				if(index <= 4) {
-					$(element).find("[data-timeago]").timeago();
-				}
+				var $element = $(element);
 				if(index > 4) { // max out at 5
-					$(element).remove();
+					$element.fadeOut(500, function() { $element.remove(); });
+				}
+				else {
+					$element.find("[data-timeago]").timeago();
 				}
 			});
 		}).fail(function() {
