@@ -8,6 +8,16 @@ var bb = {
 	}
 };
 
+bb.stream = {
+	init: function() {
+		bb.stream.url("/screens/welcome/");
+	},
+	url: function(url) {
+		$(".js-streamer").attr("src", url);
+		bb.log("Streamer", "Changed frame to " + url);
+	}
+};
+
 bb.tweetstream = {
 	loadedTweets: [],
 	init: function() {
@@ -57,7 +67,7 @@ bb.schedule = {
 	lastTimestamp: 0000000000,
 	init: function() {
 		bb.schedule.checkForUpdate();
-		setInterval(bb.schedule.checkForUpdate, 30000); // 30 seconds
+		setInterval(bb.schedule.checkForUpdate, 62000); // 62 seconds
 	},
 	checkForUpdate: function() {
 		var template = $("#tmpl-schedule").html(),
@@ -96,4 +106,5 @@ bb.schedule = {
 $(document).ready(function() {
 	bb.schedule.init();
 	bb.tweetstream.init();
+	bb.stream.init();
 });
