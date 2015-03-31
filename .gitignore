@@ -3,3 +3,4 @@ Thumbs.db
 node_modules/
 test.php
 config.php
+screens/quiz/images/*
