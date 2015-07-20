@@ -45,10 +45,10 @@
       cutoff: 0,
       strings: {
         prefixAgo: null,
-        prefixFromNow: null,
+        prefixFromNow: "in",
         suffixAgo: "ago",
-        suffixFromNow: "from now",
-        inPast: 'any moment now',
+        suffixFromNow: null,
+        inPast: "any moment now",
         seconds: "less than a minute",
         minute: "about a minute",
         minutes: "%d minutes",

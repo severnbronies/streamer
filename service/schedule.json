@@ -1,9 +1,5 @@
 { "schedule":
 	[
-		{"timestamp": "1428141600", "time": "11:00am", "event": "Coffee at Starbucks"},
-		{"timestamp": "1428143400", "time": "11:30am", "event": "Food at The Knight's Templar"},
-		{"timestamp": "1428148800", "time": "1:00pm", "event": "You're supposed to be at the YHA by now"},
-		{"timestamp": "1428150600", "time": "1:30pm", "event": "???"},
-		{"timestamp": "1428156000", "time": "3:00pm", "event": "THE MY LITTLE PONY SEASON 5 PREMIERE!!!"}
+		{"timestamp": "1437435008", "event": "Christmas! (not really)"}
 	]
 }

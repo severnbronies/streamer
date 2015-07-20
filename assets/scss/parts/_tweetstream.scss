@@ -61,4 +61,9 @@
 		color: $bb-faded;
 		font-size: 0.8em;
 	}
+	&--faded {
+		.tweet__content {
+			opacity: .75;
+		}
+	}
 }
