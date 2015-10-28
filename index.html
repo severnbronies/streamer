@@ -64,6 +64,7 @@
  				case "streamToggle": bb.stream.toggle(); break;
  				case "streamNavigate": bb.stream.url(params.url); break;
  				case "scheduleToggle": bb.schedule.toggle(); break;
+ 				case "scheduleUpdate": bb.schedule.update(); break;
  			}
  		});
  		socket.on("alert", function(msg) {

@@ -29,7 +29,7 @@ bb.tweetstream = {
 		$tweetstream.children().each(function(index, element) {
 			var $element = $(element);
 			$element.find("[data-timeago]").timeago();
-			if(index > 9) { // max out at 10
+			if(index > 15) { // max out at 14
 				$element.fadeOut(500, function() { $element.remove(); });
 			}
 		});
@@ -59,11 +59,14 @@ bb.schedule = {
 			cache: false,
 			url: "/service/schedule.json"
 		}).done(function(data) {
+			var found = false;
 			$.each(data.schedule, function(index, event) {
-				if(event.timestamp > timeNow) {
-					if(event.timestamp != bb.schedule.lastTimestamp) {
-						bb.schedule.lastTimestamp = event.timestamp;
-						event.humanTime = new Date(parseInt(event.timestamp)*1000).toISOString();
+				var eventTime = new Date(event.timestamp).getTime();
+				if(eventTime > timeNow) {
+					found = true;
+					if(eventTime != bb.schedule.lastTimestamp) {
+						bb.schedule.lastTimestamp = eventTime;
+						event.humanTime = new Date(eventTime).toISOString();
 						var rendered = Mustache.render(template, event);
 						$("[data-schedule-content]")
 							.fadeOut(function() {
@@ -78,6 +81,18 @@ bb.schedule = {
 					}
 				}
 			});
+			if(found == false) {
+				var rendered = Mustache.render(template, {
+					timestamp: "",
+					event: "Nothing :("
+				});
+				$("[data-schedule-content]")
+					.fadeOut(function() {
+						$(this).html(rendered).fadeIn();
+					});
+			}
+		}).fail(function(jqXHR, textStatus, errorThrown) {
+			console.log(jqXHR, textStatus, errorThrown);
 		});
 	}
 };

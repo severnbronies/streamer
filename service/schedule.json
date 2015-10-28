@@ -1,5 +1,6 @@
 { "schedule":
 	[
-		{"timestamp": "1437435008", "event": "Christmas! (not really)"}
+		{"timestamp": "2015-12-25T09:30:00", "event": "Christmas!"},
+		{"timestamp": "2016-01-01T00:00:00", "event": "Happy new year's!"}
 	]
 }

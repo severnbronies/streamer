@@ -1,9 +1,9 @@
 var settings = require('./config');
-var express = require("express");
-var app     = express();
-var http    = require("http").createServer(app);
-var io      = require("socket.io")(http);
-var twitter = require("twitter");
+var express  = require("express");
+var app      = express();
+var http     = require("http").createServer(app);
+var io       = require("socket.io")(http);
+var twitter  = require("twitter");
 
 var twitterClient = new twitter({
 	consumer_key: settings.twitterConsumerKey,
@@ -25,6 +25,7 @@ io.sockets.on("connection", function(socket) {
 		socket.broadcast.emit("alert", "Reconnected to control panel.");
 	});
 	socket.on("command", function(cmd, params) {
+		console.log("command", cmd, params);
 		io.emit("command", cmd, params);
 	});
 });
@@ -50,9 +51,11 @@ http.listen(settings.port, function() {
 
 twitterClient.stream("statuses/filter", { track: settings.twitterSearch, follow: settings.twitterId }, function(stream) {
 	stream.on("data", function(tweet) {
+		//console.log("Received tweet from @" + tweet.user.screen_name + ": " + tweet.text);
 		io.emit("tweet", tweet);
 	});
 	stream.on("error", function(error) {
+		console.log("Twitter API returned error:");
 		console.log(error);
 	});
 });
