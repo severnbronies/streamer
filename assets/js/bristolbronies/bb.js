@@ -7,6 +7,7 @@ var hello = "/screens/hello/",
 bb.stream = {
 	init: function() {
 		bb.stream.url(hello);
+		bb.tweetstream.init();
 	},
 	url: function(url) {
 		$("[data-stream-iframe]").attr("src", url);
@@ -18,7 +19,9 @@ bb.stream = {
 
 bb.tweetstream = {
 	init: function() {
-
+		setInterval(function() {
+			$("[data-timeago]").timeago();
+		}, 1000);
 	},
 	update: function(tweet) {
 		var $tweetstream = $("[data-tweets-list]");
@@ -33,11 +36,6 @@ bb.tweetstream = {
 				$element.fadeOut(500, function() { $element.remove(); });
 			}
 		});
-	},
-	updateMultiple: function(tweets) {
-		$.each(tweets, function(i, tweet) {
-			bb.tweetstream.update(tweet);
-		})
 	}
 };
 
@@ -96,6 +94,22 @@ bb.schedule = {
 		});
 	}
 };
+
+bb.message = {
+	display: function(message) {
+		var template = $("#tmpl-message").html();
+		var information = {};
+		information.message = message;
+		Mustache.parse(template);
+		$("body").append(Mustache.render(template, information)); 
+		$(".message").hide().slideDown();
+		setTimeout(function() {
+			$(".message").slideUp(function() {
+				$(".message").remove();
+			});
+		}, 10000);
+	}
+}
 
 $(document).ready(function() {
 	bb.stream.init();

@@ -16,17 +16,20 @@ var twitterClient = new twitter({
 
 io.sockets.on("connection", function(socket) {
 	socket.on("connect", function() {
-		socket.broadcast.emit("alert", "Connected to control panel.");
+		io.emit("alert", "Connected to control panel.");
 	});
 	socket.on("disconnect", function() {
-		socket.broadcast.emit("alert", "Lost connection to control panel.");
+		io.emit("alert", "Lost connection to control panel.");
 	});
 	socket.on("reconnect", function() {
-		socket.broadcast.emit("alert", "Reconnected to control panel.");
+		io.emit("alert", "Reconnected to control panel.");
 	});
 	socket.on("command", function(cmd, params) {
 		console.log("command", cmd, params);
 		io.emit("command", cmd, params);
+	});
+	socket.on("alert", function(msg) {
+		io.emit("alert", msg);
 	});
 });
 
