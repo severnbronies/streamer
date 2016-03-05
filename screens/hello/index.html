@@ -3,61 +3,62 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex, nofollow">
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Lato:900">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro">
 	<style>
+		@keyframes glitch-1{0%{clip:rect(59px, 9999px, 4px, 0)}10%{clip:rect(84px, 9999px, 7px, 0)}20%{clip:rect(30px, 9999px, 5px, 0)}30%{clip:rect(22px, 9999px, 11px, 0)}40%{clip:rect(67px, 9999px, 98px, 0)}50%{clip:rect(76px, 9999px, 88px, 0)}60%{clip:rect(87px, 9999px, 73px, 0)}70%{clip:rect(4px, 9999px, 68px, 0)}80%{clip:rect(91px, 9999px, 15px, 0)}90%{clip:rect(100px, 9999px, 73px, 0)}100%{clip:rect(32px, 9999px, 49px, 0)}}
+		@keyframes glitch-2{0%{clip:rect(63px, 9999px, 24px, 0)}10%{clip:rect(33px, 9999px, 43px, 0)}20%{clip:rect(7px, 9999px, 25px, 0)}30%{clip:rect(82px, 9999px, 20px, 0)}40%{clip:rect(56px, 9999px, 63px, 0)}50%{clip:rect(85px, 9999px, 17px, 0)}60%{clip:rect(80px, 9999px, 13px, 0)}70%{clip:rect(82px, 9999px, 66px, 0)}80%{clip:rect(67px, 9999px, 99px, 0)}90%{clip:rect(55px, 9999px, 56px, 0)}100%{clip:rect(53px, 9999px, 2px, 0)}}
 		* {
 			box-sizing: border-box;
 			margin: 0;
 			padding: 0;
 		}
-		@-webkit-keyframes background {
-			0% { background-position: 0 0; }
-			100% { background-position: 0 -199px; }
-		}
-		@-webkit-keyframes title {
-			0% { transform: scale(.2); }
-			25% { transform: scale(1) rotate(-5deg); }
-			50% { transform: scale(.2); }
-			75% { transform: scale(1) rotate(5deg); }
-			100% { transform: scale(.2); }
-		}
-		html {
+		html, 
+		body {
 			height: 100%;
 		}
 		body {
-			height: 100%;
-			color: white;
-			background-image: linear-gradient(to bottom, #FF5252 0%, #FF5722 15%, #FFEB3B 30%, #4CAF50 50%, #448AFF 65%, #9C27B0 80%, #FF5252 100%);
-			background-size: 100% 200px;
-			font-family: "Source Sans Pro", sans-serif;
-			font-size: 18px;
-			text-align: center;
-			text-shadow: 0 3px 3px rgba(0,0,0,0.4);
-			-webkit-animation: background .5s linear 0s infinite;
+			color: #0f0;
+			background-color: #111;
+			background-image: repeating-linear-gradient(to top,rgba(0, 255, 0, .2) 0%,rgba(0, 255, 0, .2) 9%,rgba(0, 0, 0, 0) 10%,rgba(0, 0, 0, 0) 19%,rgba(0, 255, 0, .2) 20%);
+			background-size: auto 30px;
+			box-shadow: inset 0 0 100px 35px #111111;
 		}
 		.content {
 			position: absolute;
 			top: 50%;
 			left: 50%;
-			transform: translateY(-50%) translateX(-50%);
+			transform: translate(-50%, -50%);
 		}
 		.content h1 {
-			font-size: 10em;
-			font-family: Lato, sans-serif;
-			text-transform: uppercase;
-			font-weight: 900;
-			transform: translateZ(0px);
-			-webkit-animation: title 4s ease 0s infinite;
+			font-family: 'Source Code Pro', monospace;
+			font-size: 100px;
 		}
-		.content p {
-
+		.content h1::before,
+		.content h1::after {
+			content: attr(data-text);
+			width: 100%;
+			height: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			clip: rect(0, 0, 0, 0);
+		}
+		.content h1::before {
+			left: 2px;
+			text-shadow: -2px 0 #0f0;
+			animation: glitch-1 2.1s infinite linear alternate-reverse;
+		}
+		.content h1::after {
+			left: -2px;
+			text-shadow: -3px 0 #0f0;
+			animation: glitch-2 1.9s infinite linear alternate-reverse;
 		}
 	</style>
 	<title></title>
 </head>
 <body>
 	<div class="content">
-		<h1>Hello!</h1>
+		<h1 data-text="Hello!">Hello!</h1>
 	</div>
 </body>
 </html>

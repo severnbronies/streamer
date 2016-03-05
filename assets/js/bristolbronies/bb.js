@@ -19,9 +19,42 @@ bb.stream = {
 
 bb.tweetstream = {
 	init: function() {
+		bb.tweetstream.initLoad();
 		setInterval(function() {
 			$("[data-timeago]").timeago();
 		}, 1000);
+	},
+	initLoad: function() {
+		$.ajax({
+			url: "http://stream.bristolbronies.co.uk/service/tweets.php",
+			cache: false,
+			dataType: "json",
+			method: "GET"
+		}).done(function(data, textStatus, jqXHR){
+			var $tweetstream = $("[data-tweets-list]");
+			var template = $("#tmpl-tweet-legacy").html();
+			Mustache.parse(template);
+			$.each(data.tweets, function(i, tweet) {
+				var rendered = Mustache.render(template, tweet);
+				$tweetstream.append($(rendered).hide().fadeIn());
+				$tweetstream.children().each(function(index, element) {
+					var $element = $(element);
+					$element.find("[data-timeago]").timeago();
+					if(index > 15) { // max out at 14
+						$element.fadeOut(500, function() { $element.remove(); });
+					}
+				});
+			});
+
+			// $tweetstream.prepend($(rendered).hide().fadeIn());
+			// $tweetstream.children().each(function(index, element) {
+			// 	var $element = $(element);
+			// 	$element.find("[data-timeago]").timeago();
+			// 	if(index > 15) { // max out at 14
+			// 		$element.fadeOut(500, function() { $element.remove(); });
+			// 	}
+			// });
+		});
 	},
 	update: function(tweet) {
 		var $tweetstream = $("[data-tweets-list]");
@@ -50,7 +83,7 @@ bb.schedule = {
 	},
 	update: function() {
 		var template = $("#tmpl-schedule").html(),
-		    timeNow = Math.round(new Date().getTime()/1000);
+		    timeNow = Math.round(new Date().getTime());
 		Mustache.parse(template);
 		$.ajax({
 			dataType: "json",
@@ -62,7 +95,7 @@ bb.schedule = {
 				var eventTime = new Date(event.timestamp).getTime();
 				if(eventTime > timeNow) {
 					found = true;
-					if(eventTime != bb.schedule.lastTimestamp) {
+					//if(eventTime != bb.schedule.lastTimestamp) {
 						bb.schedule.lastTimestamp = eventTime;
 						event.humanTime = new Date(eventTime).toISOString();
 						var rendered = Mustache.render(template, event);
@@ -73,10 +106,10 @@ bb.schedule = {
 								$(this).find("[data-timeago]").timeago();
 							});
 						return false;
-					}
-					else {
-						return false;
-					}
+					// }
+					// else {
+					// 	return false;
+					// }
 				}
 			});
 			if(found == false) {

@@ -1,6 +1,10 @@
 { "schedule":
 	[
-		{"timestamp": "2015-12-25T09:30:00", "event": "Christmas!"},
-		{"timestamp": "2016-01-01T00:00:00", "event": "Happy new year's!"}
+		{"timestamp": "2015-11-28T11:00:00", "event": "Starbuckin'"},
+		{"timestamp": "2015-11-28T11:30:00", "event": "The Knights Templar"},
+		{"timestamp": "2015-11-28T13:30:00", "event": "Hydra Books"},
+		{"timestamp": "2015-11-28T16:00:00", "event": "THE SEASON FIVE FINALE EPISODES!!!!"},
+		{"timestamp": "2015-11-28T17:30:00", "event": "Forbidden Planet"},
+		{"timestamp": "2015-12-05T11:00:00", "event": "Christmas meet (in Cardiff)"}
 	]
 }

@@ -3,9 +3,10 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="robots" content="noindex, nofollow">
-	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700,400italic|Lato:900">
+	<script src="https://use.typekit.net/rvj6shm.js"></script>
+	<script>try{Typekit.load({ async: true });}catch(e){}</script>
 	<link rel="stylesheet" href="/assets/css/bristolbronies.css">
-	<title>Bristol Bronies Stream</title>
+	<title>Severn Bronies Stream</title>
 </head>
 <body>
 	<section class="stream" data-stream>
@@ -15,17 +16,17 @@
 	<section class="tweetstream" data-tweets>
 		<header class="tweetstream__header">
 			<h1 class="tweetstream__title">Tweets</h1>
-			<p class="tweetstream__subtitle">Tweet <strong>@bristolbronies</strong> or <strong>#BBS5</strong> to appear here!</p>
+			<p class="tweetstream__subtitle">Tweet <strong>@severnbronies</strong> or <strong>#SBS6</strong> to appear here!</p>
 		</header>
 		<ul class="tweetstream__list" data-tweets-list>
 			<li class="tweetstream__item tweet tweet--faded">
 				<div class="tweet__container">
 					<div class="tweet__body">
 						<div class="tweet__content">
-							Any tweets mentioning <strong>@bristolbronies</strong> or containing the hashtag <strong>#bbs5</strong> will appear here. Go on! Tweet! Do it right now! 
+							Any tweets mentioning <strong>@severnbronies</strong> or containing the hashtag <strong>#sbs6</strong> will appear here. Go on! Tweet! Do it right now! 
 						</div>
 						<div class="tweet__metadata">
-							@bristolbronies
+							@severnbronies
 						</div>
 					</div>
 				</div>
@@ -46,6 +47,21 @@
 						</div>
 						<div class="tweet__metadata">
 							@{{user.screen_name}} &middot; <time data-timeago datetime="{{created_at}}">{{created_at}}</time>
+						</div>
+					</div>
+				</div>
+			</li>
+	</script>
+	<script type="text/html" id="tmpl-tweet-legacy">
+			<li class="tweetstream__item tweet">
+				<img class="tweet__avatar" src="{{avatar}}" alt="">
+				<div class="tweet__container">
+					<div class="tweet__body">
+						<div class="tweet__content">
+							{{content}}
+						</div>
+						<div class="tweet__metadata">
+							@{{user}} &middot; <time data-timeago datetime="{{time}}">{{time}}</time>
 						</div>
 					</div>
 				</div>

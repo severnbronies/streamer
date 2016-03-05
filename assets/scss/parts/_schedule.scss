@@ -5,13 +5,14 @@
 	bottom: 0;
 	left: 0;
 	color: white;
-	background-color: #202022;
+	background-color: $bb-red-dark;
 	&__label {
 		display: inline-block;
 		width: 260px;
 		padding: 10px;
 		padding-left: 20px;
-		background-color: #424244;
+		color: white;
+		background-color: mix(#000, $bb-red-dark, 10%);
 		font-weight: bold;
 		text-transform: uppercase;
 		text-align: right;
