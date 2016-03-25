@@ -1,11 +1,11 @@
 // Rename to config.js when in use
 
 module.exports = {
-	port: 3000,
-	twitterSearch: "twitter",
-	twitterId: 000000000, // @bristolbronies
-	twitterAccessKey: "",
-	twitterAccessSecret: "",
-	twitterConsumerKey: "",
-	twitterConsumerSecret: ""	
+	port: 9001,
+	twitterSearch: "severn bronies,severnbronies,6severn",
+	twitterId: 730239216, // @severnbronies
+	twitterAccessKey: "YOUR ACCESS KEY HERE",
+	twitterAccessSecret: "YOUR ACCESS SECRET HERE",
+	twitterConsumerKey: "YOUR CONSUMER KEY HERE",
+	twitterConsumerSecret: "YOUR CONSUMER SECRET HERE"
 };
