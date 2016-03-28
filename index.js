@@ -26,11 +26,10 @@ io.sockets.on("connection", function(socket) {
 		io.emit("alert", "Reconnected to control panel.");
 	});
 	socket.on("command", function(cmd, params) {
-		console.log(params)
 		if (params.key == adminKey){
 			delete params.key;
 			if (cmd == "alert"){
-				io.emit("alert",cmd.text)
+				io.emit("alert",params.text)
 			} else {
 				io.emit("command", cmd, params);
 			}
