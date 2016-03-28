@@ -60,7 +60,7 @@ var adminKey = (Math.random().toString(36)+'00000000').slice(2, 8+2);
 app.get("/admin", adminAuth, function(req, res) {
 	res.sendFile(__dirname+"/admin.html");
 });
-app.get("/adminKey",adminAuth,funcion(req, res){
+app.get("/adminKey",adminAuth,function(req, res){
 	res.send('var ADMIN_KEY="'+adminKey+'";');
 })
 
