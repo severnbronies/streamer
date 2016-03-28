@@ -48,7 +48,7 @@ app.get("/projector", function(req, res) {
 
 var adminAuth = function(req, res, next) {
   var user = auth(req);
-  if (user === undefined || user['name'] !== 'username' || user['pass'] !== settings.adminPassword) {
+  if (user === undefined || user['name'] !== 'admin' || user['pass'] !== settings.adminPassword) {
     res.statusCode = 401;
     res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
     res.end('Unauthorized');
