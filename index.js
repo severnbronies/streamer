@@ -47,14 +47,15 @@ app.get("/projector", function(req, res) {
 });
 
 var adminAuth = function(req, res, next) {
-    var user = auth(req);
-    if (user === undefined || user['name'] !== 'username' || user['pass'] !== settings.adminPassword) {
-        res.statusCode = 401;
-        res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
-        res.end('Unauthorized');
-    } else {
-        next();
-    }
+  var user = auth(req);
+  if (user === undefined || user['name'] !== 'username' || user['pass'] !== settings.adminPassword) {
+    res.statusCode = 401;
+    res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
+    res.end('Unauthorized');
+  } else {
+    next();
+  }
+}
 app.get("/admin", adminAuth, function(req, res) {
 	res.sendFile(__dirname + "/admin.html");
 });
