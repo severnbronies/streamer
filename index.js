@@ -38,7 +38,7 @@ app.use("/screens", express.static("screens"));
 app.use("/service", express.static("service"));
 
 app.get("/", function(req, res) {
-	res.sendFile(__dirname + "/index.html");
+	res.sendFile(__dirname + "/requests.html");
 });
 
 app.get("/admin", function(req, res) {
