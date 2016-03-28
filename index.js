@@ -41,6 +41,10 @@ app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/requests.html");
 });
 
+app.get("/projector", function(req, res) {
+	res.sendFile(__dirname + "/projector.html");
+});
+
 app.get("/admin", function(req, res) {
 	res.sendFile(__dirname + "/admin.html");
 });
