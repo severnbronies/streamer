@@ -58,9 +58,11 @@ var adminAuth = function(req, res, next) {
 }
 var adminKey = (Math.random().toString(36)+'00000000').slice(2, 8+2);
 app.get("/admin", adminAuth, function(req, res) {
-	res.sendFile(__dirname+"/admin.html")
-	res.send('<script>var ADMIN_KEY="'+adminKey+'";</script>');
+	res.sendFile(__dirname+"/admin.html");
 });
+app.get("/adminKey",adminAuth,funcion(req, res){
+	res.send('var ADMIN_KEY="'+adminKey+'";');
+})
 
 http.listen(settings.port, function() {
 	console.log("Listening on port " + settings.port + ".");
