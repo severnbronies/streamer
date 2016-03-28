@@ -65,16 +65,17 @@
  		var socket = io();
  		$("[data-command]").on("click", function(e) {
  			e.preventDefault();
- 			socket.emit("command", $(this).attr("data-command"), $(this).attr("data-params"));
+			var data = $(this).attr("data-params");
+			data["key"] = ADMIN_KEY;
+ 			socket.emit("command", $(this).attr("data-command"), data);
  		});
  		$("[data-stream-url]").on("submit", function(e) {
  			e.preventDefault();
- 			socket.emit("command", "streamNavigate", { url: $(this).find("input").val() });
+ 			socket.emit("command", "streamNavigate", { url: $(this).find("input").val(), key: ADMIN_KEY });
  		});
  		$("[data-stream-alert]").on("submit", function(e) {
  			e.preventDefault();
- 			socket.emit("alert", $(this).find("input").val(), null);
- 			console.log("ALERT", $(this).find("input").val())
+ 			socket.emit("command", "alert",{"text": $(this).find("input").val(), key: ADMIN_KEY });
  		});
 	</script>
 

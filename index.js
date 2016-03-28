@@ -26,11 +26,14 @@ io.sockets.on("connection", function(socket) {
 		io.emit("alert", "Reconnected to control panel.");
 	});
 	socket.on("command", function(cmd, params) {
-		console.log("command", cmd, params);
-		io.emit("command", cmd, params);
-	});
-	socket.on("alert", function(msg) {
-		io.emit("alert", msg);
+		if (params.key == adminKey){
+			delete params.key;
+			if (cmd == "alert"){
+				io.emit("alert",cmd.text)
+			} else {
+				io.emit("command", cmd, params);
+			}
+		}
 	});
 });
 
