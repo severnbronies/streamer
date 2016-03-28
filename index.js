@@ -1,5 +1,6 @@
 var settings = require('./config');
 var express  = require("express");
+var auth = require('basic-auth')
 var app      = express();
 var http     = require("http").createServer(app);
 var io       = require("socket.io")(http);
@@ -45,7 +46,15 @@ app.get("/projector", function(req, res) {
 	res.sendFile(__dirname + "/projector.html");
 });
 
-var adminAuth = express.basicAuth('admin', settings.adminPassword)
+var adminAuth = function(req, res, next) {
+    var user = auth(req);
+    if (user === undefined || user['name'] !== 'username' || user['pass'] !== settings.adminPassword) {
+        res.statusCode = 401;
+        res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
+        res.end('Unauthorized');
+    } else {
+        next();
+    }
 app.get("/admin", adminAuth, function(req, res) {
 	res.sendFile(__dirname + "/admin.html");
 });
