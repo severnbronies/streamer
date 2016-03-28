@@ -45,7 +45,8 @@ app.get("/projector", function(req, res) {
 	res.sendFile(__dirname + "/projector.html");
 });
 
-app.get("/admin", function(req, res) {
+var adminAuth = express.basicAuth('admin', settings.adminPassword)
+app.get("/admin", adminAuth, function(req, res) {
 	res.sendFile(__dirname + "/admin.html");
 });
 
