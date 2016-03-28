@@ -56,8 +56,12 @@ var adminAuth = function(req, res, next) {
     next();
   }
 }
+var adminKey = btoa(Math.random());
 app.get("/admin", adminAuth, function(req, res) {
-	res.sendFile(__dirname + "/admin.html");
+	res.render(__dirname+"/admin.html",{},function(err,html){
+		html = html.replace("{{adminKey}}",adminKey)
+		res.send(html)
+	})
 });
 
 http.listen(settings.port, function() {
