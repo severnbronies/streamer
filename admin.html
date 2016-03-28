@@ -66,6 +66,7 @@
  		$("[data-command]").on("click", function(e) {
  			e.preventDefault();
 			var data = $(this).attr("data-params");
+			if(data === undefined) data={};
 			data["key"] = ADMIN_KEY;
  			socket.emit("command", $(this).attr("data-command"), data);
  		});
