@@ -125,6 +125,7 @@
 				case "soundcloud": soundcloudSearch(query); break;
 				default: console.warn("Bad Service",service);
 			}
+			e.preventDefault();
 		})
 
 		$("#results").on("click",".submitRequest",function(e){
