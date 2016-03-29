@@ -18,12 +18,12 @@
 		var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
 		var API_BASE= 'https://www.googleapis.com/youtube/v3/'
 		function pagedResponse(data,method,params){
-			data.request = {method:method,params:params};
-			return data;
+			$.extend(this,data)
+			this._request = {method:method,params:params};
 		}
 		pagedResponse.prototype.nexPage=function(){
-				var params = $.extend({pageToken:this.nextPageToken},this.request.params)
-				return gCall(this.request.method,params)
+				var params = $.extend({pageToken:this.nextPageToken},this._request.params)
+				return gCall(this._request.method,params)
 		}
 
 		function gCall(method,params){
