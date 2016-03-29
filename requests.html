@@ -17,11 +17,14 @@
 	<script>
 		var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
 		var API_BASE= 'https://www.googleapis.com/youtube/v3/'
-		function pagedResponse(data,method,params){
-			$.extend(this,data)
+		function PagedResponse(data,method,params){
+			var keys = Object.keys(data);
+			for(var i=0;i<keys.length;i++){
+				this[keys[i]] = data[keys[i]]
+			}
 			this._request = {method:method,params:params};
 		}
-		pagedResponse.prototype.nexPage=function(){
+		PagedResponse.prototype.nexPage=function(){
 				var params = $.extend({pageToken:this.nextPageToken},this._request.params)
 				return gCall(this._request.method,params)
 		}
@@ -30,7 +33,7 @@
 			params.key = API_KEY;
 			return new Promise(function(good,bad){
 				$.getJSON(API_BASE+method,params,function(resp){
-					good(new pagedResponse(resp,method,params))
+					good(new PagedResponse(resp,method,params))
 				}).fail(bad)
 			})
 		}
