@@ -3,173 +3,31 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Socket.io experimenting</title>
-	<style>
-		* {
-			-webkit-box-sizing: border-box;
-			   -moz-box-sizing: border-box;
-			        box-sizing: border-box;
-			margin: 0;
-			padding: 0;
-		}
-		body {
-			font-family: "Helvetica Neue", Arial, sans-serif;
-		}
-		.button {
-			display: inline-block;
-			width: 100%;
-			height: 60px;
-			padding: 0;
-			border: none;
-			border-radius: 0;
-			position: relative;
-			color: #fff;
-			background-color: #bebebe;
-			font-size: inherit;
-			text-align: center;
-			text-shadow: 0 1px 2px rgba(0, 0, 0, .25);
-			cursor: pointer;
-			box-shadow: inset 0 -2px rgba(0, 0, 0, .25);
-		}
-		.button--positive {
-			background-color: limegreen;
-		}
-		.button:active {
-			top: 1px;
-			box-shadow: none;
-		}
-		.button:focus {
-			outline: none;
-		}
-		.accordion {
-
-		}
-		.accordion__section {
-			
-		}
-		.accordion__title {
-			display: block;
-			padding: 20px;
-			background-color: #ededed;
-			font-weight: bold;
-			opacity: .5;
-			cursor: pointer;
-			transition: all .3s ease;
-		}
-		.accordion__radio {
-			display: none;
-		}
-		.accordion__radio:checked + .accordion__title {
-			opacity: 1;
-		}
-		.accordion__radio:checked ~ .accordion__content {
-			max-height: 1000px;
-			padding-top: 20px;
-			padding-bottom: 20px;
-		}
-		.accordion__content {
-			max-height: 0;
-			padding: 0 20px;
-			border-bottom: 1px solid #ccc;
-			overflow: hidden;
-			transition: all .3s ease;
-		}
-		.form {
-
-		}
-		.form__row {
-			margin-bottom: 20px;
-			overflow: hidden;
-		}
-		.form__row:last-child {
-			margin-bottom: 0;
-		}
-		.form__control {
-			width: 80%;
-			padding-right: 10px;
-			float: left;
-		}
-		.form__input {
-			width: 100%;
-			height: 60px;
-			padding: 5px 20px;
-			float: left;
-			font-size: 1.3em;
-		}
-		.form__submit {
-			width: 20%;
-		}
-	</style>
+	<link rel="stylesheet" href="/assets/css/controls.css">
+	<title>Request Songs</title>
 </head>
 <body>
 
-	<div class="accordion">
-		<div class="accordion__section">
-			<input class="accordion__radio" type="radio" name="accordion" id="stream">
-			<label class="accordion__title" for="stream">Stream</label>
-			<div class="accordion__content">
-				<form class="form" data-stream-url>
-					<div class="form__row">
-						<button type="button" class="button" data-command="streamToggle">Toggle stream visiblity</button>
-					</div>
-					<div class="form__row">
-						<div class="form__control">
-							<input class="form__input" type="url" placeholder="Enter URL">
-						</div>
-						<button type="submit" class="button button--positive form__submit">Go</button>
-					</div>
-					<!-- <button type="button" class="button" data-command="streamNavigate" data-params="{ url: '/screens/hello/' }">Hello</button>
-					<button type="button" class="button" data-command="streamNavigate" data-params="{ url: '/screens/goodbye/' }">Goodbye</button> -->
-				</form>
-			</div>
-		</div>
-		<div class="accordion__section">
-			<input class="accordion__radio" type="radio" name="accordion" id="schedule">
-			<label class="accordion__title" for="schedule">Schedule</label>
-			<div class="accordion__content">
-				<div class="form">
-					<div class="form__row">
-						<button type="button" class="button" data-command="scheduleToggle">Toggle schedule visiblity</button>
-					</div>
-					<div class="form__row">
-						<button type="button" class="button" data-command="scheduleUpdate">Force update schedule</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="accordion__section">
-			<input class="accordion__radio" type="radio" name="accordion" id="message">
-			<label class="accordion__title" for="message">Alert message</label>
-			<div class="accordion__content">
-				<form class="form" data-stream-alert>
-					<div class="form__row">
-						<div class="form__control">
-							<input class="form__input" type="text" placeholder="Enter message">
-						</div>
-						<button type="submit" class="button button--positive form__submit">Go</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	
+	<form id="search">
+		<input type="search" placeholder="Search For..."/>
+	</form>
+
 	<script src="/assets/js/vendor.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 	<script>
+		var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
+		var API_BASE= 'https://www.googleapis.com/youtube/v3/'
+
+		function gCall(method,params){
+			return $.getJSON(API_BASE+method,params)
+		}
+		var searchVideo = q=> gCall("search",{q:q});
+	</script>
+	<script>
  		var socket = io();
- 		$("[data-command]").on("click", function(e) {
- 			e.preventDefault();
- 			socket.emit("command", $(this).attr("data-command"), $(this).attr("data-params"));
- 		});
- 		$("[data-stream-url]").on("submit", function(e) {
- 			e.preventDefault();
- 			socket.emit("command", "streamNavigate", { url: $(this).find("input").val() });
- 		});
- 		$("[data-stream-alert]").on("submit", function(e) {
- 			e.preventDefault();
- 			socket.emit("alert", $(this).find("input").val(), null);
- 			console.log("ALERT", $(this).find("input").val())
- 		});
+		$("#search").on("submit",function(e){
+			e.preventDefault();
+		})
 	</script>
 
 </body>

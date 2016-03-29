@@ -53,7 +53,7 @@ var adminAuth = function(req, res, next) {
   var user = auth(req);
   if (user === undefined || user['name'] !== 'admin' || user['pass'] !== settings.adminPassword) {
     res.statusCode = 401;
-    res.setHeader('WWW-Authenticate', 'Basic realm="MyRealmName"');
+    res.setHeader('WWW-Authenticate', 'Basic realm="Severn Bronies Streamer Admin Interface"');
     res.end('Unauthorized');
   } else {
     next();
