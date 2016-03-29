@@ -17,9 +17,10 @@
 
 	<script type="text/html" id="tmlp-youtubeVideo">
 		<div>
-			<div>{{snippet.title}}<div>
-			<img src="{{snippet.thumbnails.default.url}}">
-			<span>{{snippet.description}}</span>
+			<h1>{{snippet.title}}</h1>
+			<img src="{{snippet.thumbnails.default.url}}" style="float:left">
+			<div style="clear:left">{{snippet.description}}</div>
+			<input class="youtubeRequest" type="button" data-request-id="{{snippet.id.videoId}}"
 		</div>
 	</script>
 
@@ -46,8 +47,7 @@
 		}
 		var searchVideo = q=> youtubeApiCall("search",{q:q,part:"snippet"});
 		var nextSearchPage = p=> youtubeApiCall("search",{pageToken:p,part:"snippet"})
-	</script>
-	<script>
+
  		var socket = io();
 		$("#search").on("submit",function(e){
 			$("#results").empty();
@@ -56,6 +56,12 @@
 				.catch(function(e){console.error(e)})
 			e.preventDefault();
 		})
+
+		$("#results").on("click",".youtubeRequest",function(e){
+			socket.emit("request","youtube",$(this).attr("data-request-id"));
+			e.preventDefault();
+		})
+
 		function searchResults(resp){
 			$("#more").attr("data-pageCode",resp.nextPageToken)
 			var template = $("#tmlp-youtubeVideo").html();
