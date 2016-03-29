@@ -19,9 +19,10 @@
 		var API_BASE= 'https://www.googleapis.com/youtube/v3/'
 
 		function gCall(method,params){
+			params.key = API_KEY;
 			return $.getJSON(API_BASE+method,params)
 		}
-		var searchVideo = q=> gCall("search",{q:q});
+		var searchVideo = q=> gCall("search",{q:q,part:snippet});
 	</script>
 	<script>
  		var socket = io();
