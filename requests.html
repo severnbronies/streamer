@@ -5,6 +5,11 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="/assets/css/controls.css">
 	<title>Request Songs</title>
+	<style>
+		body{
+			padding:20px;
+		}
+	</style>
 </head>
 <body>
 
@@ -22,7 +27,7 @@
 		</select>
 	</form>
 	<div id="results"></div>
-	<input class="form__button" id="more" type="button" value="Load More" data-pageCode/>
+	<button class="button" id="more" type="button">Load More</button>
 
 
 	<script type="text/html" id="tmlp-song">
@@ -54,7 +59,8 @@
 				q: query,
 				pageToken: pageToken,
 				part: "snippet",
-				key: API_KEY
+				key: API_KEY,
+				maxResults: 20
 			};
 			$.getJSON(API_ENDPOINT,params,function(resp){
 				var items = $.map(resp.items,function(v){
