@@ -41,7 +41,9 @@
 	<script>
  		var socket = io();
 		$("#search").on("submit",function(e){
-			searchVideo($(this).find("[name=search]").val()).then(searchResults)
+			searchVideo($(this).find("[name=search]").val())
+				.then(searchResults)
+				.catch(function(e){console.error(e)})
 			e.preventDefault();
 		})
 		function searchResults(resp){
@@ -52,7 +54,7 @@
 				)
 			})
 			$("#more").off("click").one("click",function(){
-				resp.nextPage().then(searchResults)
+				resp.nextPage().then(searchResults).catch(function(e){console.error(e)})
 			})
 		}
 	</script>
