@@ -9,40 +9,53 @@
 <body>
 
 	<form id="search">
-		<input type="search" placeholder="Search For..."/>
+		<input name="search" type="search" placeholder="Search For..."/>
 	</form>
+	<div id="results"></div>
+	<input id="more" type="button" value="Load More" data-pageCode/>
 
 	<script src="/assets/js/vendor.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 	<script>
 		var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
 		var API_BASE= 'https://www.googleapis.com/youtube/v3/'
-		function PagedResponse(data,method,params){
-			var keys = Object.keys(data);
-			for(var i=0;i<keys.length;i++){
-				this[keys[i]] = data[keys[i]]
-			}
+		function pagedResponse(data,method,params){
+			$.extend(this,data)
 			this._request = {method:method,params:params};
 		}
-		PagedResponse.prototype.nexPage=function(){
+		pagedResponse.prototype.nextPage=function(){
 				var params = $.extend({pageToken:this.nextPageToken},this._request.params)
 				return gCall(this._request.method,params)
 		}
-
-		function gCall(method,params){
+		function youtubeApiCall(method,params){
 			params.key = API_KEY;
 			return new Promise(function(good,bad){
 				$.getJSON(API_BASE+method,params,function(resp){
-					good(new PagedResponse(resp,method,params))
+					good(new pagedResponse(resp,method,params))
 				}).fail(bad)
 			})
 		}
-		var searchVideo = q=> gCall("search",{q:q,part:"snippet"});
+		var searchVideo = q=> youtubeApiCall("search",{q:q,part:"snippet"});
+		var nextSearchPage = p=> youtubeApiCall("search",{pageToken:p,part:"snippet"})
 	</script>
 	<script>
  		var socket = io();
 		$("#search").on("submit",function(e){
+			searchVideo($(this).find("[name=search]").val()).then(searchResults)
 			e.preventDefault();
+		})
+		function searchResults(resp){
+			$("#more").attr("data-pageCode",resp.nextPageToken)
+			$.forEach(resp.items,function(){
+				$("#results").append(
+					$("<li>").text(this.snippet.title)
+				)
+			})
+		}
+		$("#more").click(function(){
+			if(this.attr("data-pageCode")){
+				nextSearchPage(this.attr("data-pageCode")).then(searchResults)
+			}
 		})
 	</script>
 
