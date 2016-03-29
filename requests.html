@@ -25,7 +25,7 @@
 		}
 		pagedResponse.prototype.nextPage=function(){
 				var params = $.extend({pageToken:this.nextPageToken},this._request.params)
-				return gCall(this._request.method,params)
+				return youtubeApiCall(this._request.method,params)
 		}
 		function youtubeApiCall(method,params){
 			params.key = API_KEY;
