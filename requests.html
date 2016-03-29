@@ -51,13 +51,10 @@
 					$("<li>").text(this.snippet.title)
 				)
 			})
+			$("#more").off("click").one("click",function(){
+				resp.nextPage().then(searchResults)
+			})
 		}
-		$("#more").click(function(){
-			var $t=$(this)
-			if($t.attr("data-pageCode")){
-				nextSearchPage($t.attr("data-pageCode")).then(searchResults)
-			}
-		})
 	</script>
 
 </body>
