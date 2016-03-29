@@ -36,7 +36,7 @@ io.sockets.on("connection", function(socket) {
 		}
 	});
 	socket.on("request", function(type,id){
-		console.log("request for ",type,id)
+		console.log("request for",type,id)
 	})
 });
 

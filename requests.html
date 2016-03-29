@@ -15,20 +15,81 @@
 	<input id="more" type="button" value="Load More" data-pageCode/>
 
 
-	<script type="text/html" id="tmlp-youtubeVideo">
+	<script type="text/html" id="tmlp-song">
 		<div>
-			<h1>{{snippet.title}}</h1>
-			<img src="{{snippet.thumbnails.default.url}}" style="float:left">
-			<div style="clear:left">{{snippet.description}}</div>
-			<input class="youtubeRequest" type="button" data-request-id="{{id.videoId}}">Request</input>
+			<h1>{{title}}</h1>
+			<img src="{{thumbnail}" style="float:left">
+			<div style="clear:left">{{description}}</div>
+			<input class="submitRequest" type="button" data-id="{{id}}" data-type="{{type}}" value="Request"/>
 		</div>
 	</script>
 
 	<script src="/assets/js/vendor.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 	<script>
-		var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
-		var API_BASE= 'https://www.googleapis.com/youtube/v3/'
+		function addSongs(items,loadNextPage){
+			var template = $("#tmlp-song").html();
+			$.each(items,function(){
+				$("#results").append(
+					$("<li>").html(Mustache.render(template,this))
+				)
+			});
+			$("#more").off("click").one("click",loadNextPage);
+		}
+
+		var youtubeSearch = (function(){
+			var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
+			var API_ENDPOINT= 'https://www.googleapis.com/youtube/v3/search';
+			return function(query,pageToken){
+				var params = {
+					q: query,
+					pageToken: pageToken,
+					part: "snippet"
+					key: API_KEY
+				};
+				$.getJSON(API_ENDPOINT,params,function(resp){
+					var items = $.map(resp.items,function(v){
+						return {
+							title: v.snippet.title,
+							thumbnail: v.snippet.thumbnail.default.url,
+							description: v.snippet.description,
+							id: v.id.videoId,
+							type: "youtube"
+						}
+					})
+					addSongs(items,function(){youtubeSearch(query,resp.nextPageToken)})
+				})
+			}
+		})()
+
+		var soundcloudSearch = (function(){
+			var API_KEY = "fbab4fa264979594df9f5cda9fd1fa3d";
+			var API_ENDPOINT = "https://api.soundcloud.com/tracks";
+			return function(query,offset){
+				if(offset === undefined){
+					offset=0
+				}
+				var params = {
+					q: query,
+					offset:offset,
+					client_id: API_KEY
+				};
+				$.getJSON(API_ENDPOINT,params,function(resp){
+					var items = $.map(resp,function(v){
+						return {
+							title: v.title,
+							thumbnail: v.artwork_url,
+							description: v.description,
+							id: v.id,
+							type: "soundcloud"
+						}
+					})
+					addSongs(items,function(){soundcloudSearch(query,offset+items.length)})
+				})
+			}
+		})
+
+		/*
 		function pagedResponse(data,method,params){
 			$.extend(this,data)
 			this._request = {method:method,params:params};
@@ -47,32 +108,23 @@
 		}
 		var searchVideo = q=> youtubeApiCall("search",{q:q,part:"snippet"});
 		var nextSearchPage = p=> youtubeApiCall("search",{pageToken:p,part:"snippet"})
+		*/
 
  		var socket = io();
 		$("#search").on("submit",function(e){
 			$("#results").empty();
-			searchVideo($(this).find("[name=search]").val())
-				.then(searchResults)
-				.catch(function(e){console.error(e)})
+			youtubeSearch($(this).find("[name=search]").val())
 			e.preventDefault();
 		})
 
-		$("#results").on("click",".youtubeRequest",function(e){
-			socket.emit("request","youtube",$(this).attr("data-request-id"));
+		$("#results").on("click",".submitRequest",function(e){
+			var $t = $(this);
+			socket.emit("request",$t.attr("data-type"),$t.attr("data-id"));
 			e.preventDefault();
 		})
 
 		function searchResults(resp){
-			$("#more").attr("data-pageCode",resp.nextPageToken)
-			var template = $("#tmlp-youtubeVideo").html();
-			$.each(resp.items,function(){
-				$("#results").append(
-					$("<li>").html(Mustache.render(template,this))
-				)
-			})
-			$("#more").off("click").one("click",function(){
-				resp.nextPage().then(searchResults).catch(function(e){console.error(e)})
-			})
+
 		}
 	</script>
 
