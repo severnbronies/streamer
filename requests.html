@@ -60,7 +60,8 @@
 				pageToken: pageToken,
 				part: "snippet",
 				key: API_KEY,
-				maxResults: 20
+				maxResults: 20,
+				type:"video"
 			};
 			$.getJSON(API_ENDPOINT,params,function(resp){
 				var items = $.map(resp.items,function(v){
