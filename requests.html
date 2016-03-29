@@ -41,7 +41,7 @@
 			$("#more").off("click").one("click",loadNextPage);
 		}
 
-		var youtubeSearch = (function(query,pageToken){
+		var youtubeSearch = function(query,pageToken){
 			var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
 			var API_ENDPOINT= 'https://www.googleapis.com/youtube/v3/search';
 			var params = {
