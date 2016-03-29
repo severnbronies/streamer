@@ -46,15 +46,16 @@
 		})
 		function searchResults(resp){
 			$("#more").attr("data-pageCode",resp.nextPageToken)
-			$.forEach(resp.items,function(){
+			$.each(resp.items,function(){
 				$("#results").append(
 					$("<li>").text(this.snippet.title)
 				)
 			})
 		}
 		$("#more").click(function(){
-			if(this.attr("data-pageCode")){
-				nextSearchPage(this.attr("data-pageCode")).then(searchResults)
+			var $t=$(this)
+			if($t.attr("data-pageCode")){
+				nextSearchPage($t.attr("data-pageCode")).then(searchResults)
 			}
 		})
 	</script>
