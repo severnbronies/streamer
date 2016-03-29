@@ -89,27 +89,6 @@
 			})
 		}
 
-		/*
-		function pagedResponse(data,method,params){
-			$.extend(this,data)
-			this._request = {method:method,params:params};
-		}
-		pagedResponse.prototype.nextPage=function(){
-				var params = $.extend({},this._request.params,{pageToken:this.nextPageToken})
-				return youtubeApiCall(this._request.method,params)
-		}
-		function youtubeApiCall(method,params){
-			params.key = API_KEY;
-			return new Promise(function(good,bad){
-				$.getJSON(API_BASE+method,params,function(resp){
-					good(new pagedResponse(resp,method,params))
-				}).fail(bad)
-			})
-		}
-		var searchVideo = q=> youtubeApiCall("search",{q:q,part:"snippet"});
-		var nextSearchPage = p=> youtubeApiCall("search",{pageToken:p,part:"snippet"})
-		*/
-
  		var socket = io();
 		$("#search").on("submit",function(e){
 			$("#results").empty();
