@@ -41,57 +41,53 @@
 			$("#more").off("click").one("click",loadNextPage);
 		}
 
-		var youtubeSearch = (function(){
+		var youtubeSearch = (function(query,pageToken){
 			var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
 			var API_ENDPOINT= 'https://www.googleapis.com/youtube/v3/search';
-			return function(query,pageToken){
-				var params = {
-					q: query,
-					pageToken: pageToken,
-					part: "snippet",
-					key: API_KEY
-				};
-				$.getJSON(API_ENDPOINT,params,function(resp){
-					var items = $.map(resp.items,function(v){
-						return {
-							title: v.snippet.title,
-							thumbnail: v.snippet.thumbnail.default.url,
-							description: v.snippet.description,
-							id: v.id.videoId,
-							type: "youtube"
-						}
-					})
-					addSongs(items,function(){youtubeSearch(query,resp.nextPageToken)})
+			var params = {
+				q: query,
+				pageToken: pageToken,
+				part: "snippet",
+				key: API_KEY
+			};
+			$.getJSON(API_ENDPOINT,params,function(resp){
+				var items = $.map(resp.items,function(v){
+					return {
+						title: v.snippet.title,
+						thumbnail: v.snippet.thumbnails.default.url,
+						description: v.snippet.description,
+						id: v.id.videoId,
+						type: "youtube"
+					}
 				})
-			}
-		})()
+				addSongs(items,function(){youtubeSearch(query,resp.nextPageToken)})
+			})
+		}
 
-		var soundcloudSearch = (function(){
+		var soundcloudSearch = function(query,offset){
 			var API_KEY = "fbab4fa264979594df9f5cda9fd1fa3d";
 			var API_ENDPOINT = "https://api.soundcloud.com/tracks";
-			return function(query,offset){
-				if(offset === undefined){
-					offset=0
-				}
-				var params = {
-					q: query,
-					offset:offset,
-					client_id: API_KEY
-				};
-				$.getJSON(API_ENDPOINT,params,function(resp){
-					var items = $.map(resp,function(v){
-						return {
-							title: v.title,
-							thumbnail: v.artwork_url,
-							description: v.description,
-							id: v.id,
-							type: "soundcloud"
-						}
-					})
-					addSongs(items,function(){soundcloudSearch(query,offset+items.length)})
-				})
+			if(offset === undefined){
+				offset=0
 			}
-		})
+			var params = {
+				q: query,
+				offset:offset,
+				client_id: API_KEY
+			};
+			$.getJSON(API_ENDPOINT,params,function(resp){
+				var items = $.map(resp,function(v){
+					return {
+						title: v.title,
+						thumbnail: v.artwork_url,
+						description: v.description,
+						id: v.id,
+						type: "soundcloud"
+					}
+				})
+				addSongs(items,function(){soundcloudSearch(query,offset+items.length)})
+			})
+		}
 
 		/*
 		function pagedResponse(data,method,params){
