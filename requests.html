@@ -58,7 +58,7 @@
 		})
 		function searchResults(resp){
 			$("#more").attr("data-pageCode",resp.nextPageToken)
-			var template = $("#tmlp-youtubeVideo");
+			var template = $("#tmlp-youtubeVideo").html();
 			$.each(resp.items,function(){
 				$("#results").append(
 					$("<li>").html(Mustache.render(template,this))
