@@ -8,10 +8,14 @@
 </head>
 <body>
 
-	<form id="search" class="form__row">
-		<input class="form__input" name="search" type="search" placeholder="Search For..."/>
-		<select name="service">
-			<option value="youtube">Youtube</option>
+	<form id="search" class="form">
+		<div class="form__row">
+			<input class="form__input" name="search" type="search" placeholder="Search For..."/>
+		</div>
+		<button type="submit" class="form__submit">Search</button>
+
+		<select name="service" hidden>
+			<option value="youtube" selected>Youtube</option>
 			<option value="soundcloud">Soundcloud</option>
 		</select>
 	</form>
