@@ -1,7 +1,7 @@
-var settings = require('./config');
+var settings = require("./config");
 var express  = require("express");
 var app      = express();
-var auth     = require('basic-auth');
+var auth     = require("basic-auth");
 var http     = require("http").createServer(app);
 var io       = require("socket.io")(http);
 var twitter  = require("twitter");
@@ -29,6 +29,7 @@ var log = {
  */
 
 http.listen(settings.port, function() {
+	console.log(log.CONNECTION, "Streamer started successfully.");
 	console.log(log.CONNECTION, "Stream   : " + ip.address() + ":" + settings.port + "/stream");
 	console.log(log.CONNECTION, "Admin    : " + ip.address() + ":" + settings.port + "/admin");
 	console.log(log.CONNECTION, "Requests : " + ip.address() + ":" + settings.port);
@@ -54,8 +55,11 @@ var adminAuth = function(req, res, next) {
  */
 
 io.sockets.on("connection", function(socket) {
-	console.log(log.CONNECTION, "New device connected.");
+	// console.log(log.CONNECTION, "New device connected.");
 	socket.on("command", function(cmd, params) {
+		console.log(log.DEBUG, "Command      :", cmd, params);
+		console.log(log.DEBUG, "Provided key :", params.key);
+		console.log(log.DEBUG, "Admin key    :", adminKey);
 		if(params.key === adminKey) {
 			delete params.key;
 			switch(cmd) {
@@ -79,6 +83,13 @@ io.sockets.on("connection", function(socket) {
 /**
  * Routing
  */
+
+app.use(function(req, res, next) {
+	res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+	res.header("Expires", "-1");
+	res.header("Pragma", "no-cache");
+	next();
+});
 
 app.use("/dst", express.static("dst"));
 app.use("/screens", express.static("screens"));
@@ -133,17 +144,16 @@ app.get("/request", function(req, res) {
 			playerPlayNextSong();
 		}
 		io.emit("command", "newRequest", videoRequest);
-		console.log(log.PLAYER, "New video requested:", videoRequest);
-		console.log(log.DEBUG, videoRequest);
+		console.log(log.PLAYER, "New video requested:", videoRequest.id);
 		res.send({ added: true });
 	} 
 	else if(status === true) {
 		res.send({ added: false, error: "Video already in playlist" });
-		console.log(log.PLAYER, "Duplicate video requested:", videoRequest);
+		console.log(log.PLAYER, "Duplicate video requested:", videoRequest.id);
 	} 
 	else if(status === false) {
 		res.send({ added: false, error: "Video has been banned" });
-		console.log(log.PLAYER, "Banned video requested:", videoRequest);
+		console.log(log.PLAYER, "Banned video requested:", videoRequest.id);
 	}
 });
 
