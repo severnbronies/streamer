@@ -32,6 +32,8 @@ io.sockets.on("connection", function(socket) {
 				io.emit("alert",params.text);
 			} else if (cmd == "nextsong") {
 				playNextSong();
+			} else if (cmd == "videoplaying") {
+				removeNextSong();
 			} else {
 				io.emit("command", cmd, params);
 			}
@@ -84,8 +86,11 @@ app.get("/request",function(req,res) {
 	var reqKey = songRequest.type+"::"+songRequest.id,
 			status = requestSet[reqKey];
 	if (status === undefined){
-		requestQueue.push(songRequest);
 		requestSet[reqKey] = true;
+		if (requestQueue.push(songRequest) == 1){
+			//Queue was empty, play now
+			playNextSong();
+		}
 		io.emit("command", "newRequest", songRequest);
 		console.log("New request",songRequest);
 		res.send({added:true});
@@ -100,14 +105,19 @@ app.get("/request",function(req,res) {
 });
 
 function playNextSong(){
-	var song = requestQueue.shift();
-	if(song === undefined){
+	if (song.length === 0){
 		console.log("Queue Empty");
 		return;
 	}
-	requestSet[song.type+"::"+song.id] = undefined;
+	var song = requestQueue[0];
 	io.emit("command", "playsong", song);
-	console.log("Playing song",song);
+	console.log("Sending song",song);
+}
+
+function removeNextSong(){
+	var song = requestQueue.shift();
+	requestSet[song.type+"::"+song.id] = undefined;
+	console.log("Song now playing",song);
 }
 
 app.get("/player", adminAuth,function(req,res) {
