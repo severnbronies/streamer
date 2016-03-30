@@ -1,8 +1,8 @@
 var gulp = require("gulp");
 var sass = require("gulp-sass");
-var autoprefixer = require("gulp-autoprefixer");
 var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
+var newer = require("gulp-newer");
 var imagemin = require("gulp-imagemin");
 
 gulp.task("default", function() {
@@ -17,12 +17,6 @@ gulp.task("stylesheets", function() {
 		{
 			errLogToConsole: true,
 			outputStyle: "compressed"
-		}
-	))
-	.pipe(autoprefixer(
-		{
-			browsers: ['last 2 version', 'ie 8', 'ie 9', 'ie 10'],
-			cascade: false
 		}
 	))
 	.pipe(gulp.dest("./assets/css"))
