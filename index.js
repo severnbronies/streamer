@@ -82,6 +82,7 @@ app.get("/request",function(req,res) {
 		res.send({added:false,error:"Song has been banned"});
 		console.log("Banned request",songRequest);
 	}
+	console.log(requestSet); //DEBUG
 });
 
 function playNextSong(){
