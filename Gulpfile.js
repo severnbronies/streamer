@@ -24,7 +24,7 @@ gulp.task("stylesheets", function() {
 });
 
 gulp.task("scripts", function() {
-	gulp.src("./src/js/vendor/{,*/}*.js")
+	gulp.src(["./src/js/vendor/{,*/}*.js", "./src/js/scripts/{,*/}*.js"])
 	.pipe(uglify())
 	.pipe(concat("scripts.js"))
 	.pipe(gulp.dest("./dst/js"))
