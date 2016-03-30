@@ -8,8 +8,9 @@
     <script>
       var socket = io();
       socket.on("command",function(cmd,params){
-        if (cmd == "playsng"){
+        if (cmd == "playsong"){
           player.loadVideoById(params.id,0,"large");
+          console.log("Plaing",params)
         }
       })
 
@@ -33,7 +34,7 @@
       }
 
       function getNextVideo(){
-        io.emit("command","nextsong",{key:ADMIN_KEY})
+        socket.emit("command","nextsong",{key:ADMIN_KEY})
       }
 
     </script>

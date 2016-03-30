@@ -103,6 +103,7 @@ function playNextSong(){
 	var song = requestQueue.unshift();
 	requestSet[song.type+"::"+song.id] = undefined;
 	io.emit("command", "playsong", song);
+	console.log("Playing song",song);
 }
 
 app.get("/player", adminAuth,function(req,res) {
