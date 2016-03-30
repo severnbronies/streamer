@@ -101,7 +101,6 @@
 			})
 		}
 
- 		var socket = io();
 		$("#search").on("submit",function(e){
 			$("#results").empty();
 			var $t = $(this),
@@ -118,7 +117,6 @@
 		$("#results").on("click",".submitRequest",function(e){
 			var $t = $(this);
 			$.get("request",{type:$t.attr("data-type"),id:$t.attr("data-id")})
-			//socket.emit("request",$t.attr("data-type"),$t.attr("data-id"));
 			e.preventDefault();
 		})
 	</script>
