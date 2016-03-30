@@ -101,6 +101,10 @@ app.get("/request",function(req,res) {
 
 function playNextSong(){
 	var song = requestQueue.shift();
+	if(song === undefined){
+		console.log("Queue Empty");
+		return;
+	}
 	requestSet[song.type+"::"+song.id] = undefined;
 	io.emit("command", "playsong", song);
 	console.log("Playing song",song);
