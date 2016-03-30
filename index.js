@@ -105,7 +105,7 @@ app.get("/request",function(req,res) {
 });
 
 function playNextSong(){
-	if (song.length === 0){
+	if (requestQueue.length === 0){
 		console.log("Queue Empty");
 		return;
 	}
