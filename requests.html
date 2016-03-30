@@ -117,7 +117,7 @@
 		$("#results").on("click",".submitRequest",function(e){
 			var $t = $(this);
 			console.log($t);
-			$.getJSON("request",{type:$t.attr("data-type"),id:$t.attr("data-id")},function(resp){
+			$.getJSON("/request",{type:$t.attr("data-type"),id:$t.attr("data-id")},function(resp){
 				if (resp.added){
 					$t.text("Song Added");
 				} else {

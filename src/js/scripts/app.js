@@ -25,36 +25,7 @@ bb.tweetstream = {
 		}, 1000);
 	},
 	initLoad: function() {
-		$.ajax({
-			url: "http://stream.bristolbronies.co.uk/service/tweets.php",
-			cache: false,
-			dataType: "json",
-			method: "GET"
-		}).done(function(data, textStatus, jqXHR){
-			var $tweetstream = $("[data-tweets-list]");
-			var template = $("#tmpl-tweet-legacy").html();
-			Mustache.parse(template);
-			$.each(data.tweets, function(i, tweet) {
-				var rendered = Mustache.render(template, tweet);
-				$tweetstream.append($(rendered).hide().fadeIn());
-				$tweetstream.children().each(function(index, element) {
-					var $element = $(element);
-					$element.find("[data-timeago]").timeago();
-					if(index > 15) { // max out at 14
-						$element.fadeOut(500, function() { $element.remove(); });
-					}
-				});
-			});
-
-			// $tweetstream.prepend($(rendered).hide().fadeIn());
-			// $tweetstream.children().each(function(index, element) {
-			// 	var $element = $(element);
-			// 	$element.find("[data-timeago]").timeago();
-			// 	if(index > 15) { // max out at 14
-			// 		$element.fadeOut(500, function() { $element.remove(); });
-			// 	}
-			// });
-		});
+		
 	},
 	update: function(tweet) {
 		var $tweetstream = $("[data-tweets-list]");
@@ -143,9 +114,3 @@ bb.message = {
 		}, 10000);
 	}
 }
-
-$(document).ready(function() {
-	bb.stream.init();
-	bb.tweetstream.init();
-	bb.schedule.init();
-});

@@ -58,19 +58,17 @@ io.sockets.on("connection", function(socket) {
 	// console.log(log.CONNECTION, "New device connected.");
 	socket.on("command", function(cmd, params) {
 		console.log(log.DEBUG, "Command      :", cmd, params);
-		console.log(log.DEBUG, "Provided key :", params.key);
-		console.log(log.DEBUG, "Admin key    :", adminKey);
 		if(params.key === adminKey) {
 			delete params.key;
 			switch(cmd) {
 				case "alert":
 					io.emit("alert", params.text);
 					break;
-				case "playerNextSong":
-					playerPlayNextSong();
+				case "playerNextVideo":
+					playerPlayNextVideo();
 					break;
 				case "playerVideoPlaying":
-					playerRemoveNextSong();
+					playerRemoveNextVideo();
 					break;
 				default:
 					io.emit("command", cmd, params);
@@ -141,9 +139,9 @@ app.get("/request", function(req, res) {
 	if(typeof status === "undefined") {
 		requestSet[reqKey] = true;
 		if(requestQueue.push(videoRequest) === 1) {
-			playerPlayNextSong();
+			playerPlayNextVideo();
 		}
-		io.emit("command", "newRequest", videoRequest);
+		io.emit("command", "playerNewRequest", videoRequest);
 		console.log(log.PLAYER, "New video requested:", videoRequest.id);
 		res.send({ added: true });
 	} 
@@ -155,19 +153,20 @@ app.get("/request", function(req, res) {
 		res.send({ added: false, error: "Video has been banned" });
 		console.log(log.PLAYER, "Banned video requested:", videoRequest.id);
 	}
+	console.log(log.DEBUG, requestQueue);
 });
 
-function playerPlayNextSong(){
+function playerPlayNextVideo(){
 	if(requestQueue.length === 0){
 		console.log(log.PLAYER, "Queue empty.");
 		return;
 	}
 	var video = requestQueue[0];
-	io.emit("command", "playsong", video);
+	io.emit("command", "playerPlayVideo", video);
 	console.log(log.PLAYER, "Sending video to player:", video);
 }
 
-function playerRemoveNextSong(){
+function playerRemoveNextVideo(){
 	var video = requestQueue.shift();
 	delete requestSet[video.type + "::" + video.id];
 	console.log(log.PLAYER, "Now playing:", video);
@@ -177,19 +176,35 @@ function playerRemoveNextSong(){
  * Twitter streamin'
  */
 
-var twitterClient = new twitter({
-	consumer_key: settings.twitterConsumerKey,
-	consumer_secret: settings.twitterConsumerSecret,
-	access_token_key: settings.twitterAccessKey,
-	access_token_secret: settings.twitterAccessSecret
-});
-
-twitterClient.stream("statuses/filter", { track: settings.twitterSearch, follow: settings.twitterId }, function(stream) {
-	stream.on("data", function(tweet) {
-		console.log(log.TWITTER, "@" + tweet.user.screen_name + ":", tweet.text);
-		io.emit("tweet", tweet);
-	});
-	stream.on("error", function(error) {
-		console.log(log.ERROR, "Twitter streaming API returned error:", error);
-	});
+io.of("/stream").on("connection", function(socket) {
+	initTweetstream(socket);
+	function initTweetstream(socket) {
+		console.log(log.TWITTER, "Initialising tweetstream.");
+		var twitterClient = new twitter({
+			consumer_key: settings.twitterConsumerKey,
+			consumer_secret: settings.twitterConsumerSecret,
+			access_token_key: settings.twitterAccessKey,
+			access_token_secret: settings.twitterAccessSecret
+		});
+		twitterClient.get("search/tweets", { q: settings.twitterSearchArchive }, function(error, tweets, response) {
+			if(error) {
+				console.log(log.ERROR, "Twitter REST API returned error:", error);
+				return;
+			}
+			tweets = tweets.statuses.reverse();
+			for(var i = 0; i < tweets.length; i++) {
+				console.log(log.TWITTER, "@" + tweets[i].user.screen_name + ":", tweets[i].text);
+				socket.emit("tweet", tweets[i]);
+			}
+		});
+		twitterClient.stream("statuses/filter", { track: settings.twitterSearchLive, follow: settings.twitterId }, function(stream) {
+			stream.on("data", function(tweet) {
+				console.log(log.TWITTER, "@" + tweet.user.screen_name + ":", tweet.text);
+				socket.emit("tweet", tweet);
+			});
+			stream.on("error", function(error) {
+				console.log(log.ERROR, "Twitter streaming API returned error:", error);
+			});
+		});
+	}
 });

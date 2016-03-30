@@ -19,7 +19,7 @@
     <script>
       var socket = io();
       socket.on("command",function(cmd,params){
-        if (cmd == "playsong"){
+        if (cmd == "playerPlayVideo"){
           var pState = player.getPlayerState();
           if (pState == YT.PlayerState.ENDED ||
             pState == YT.PlayerState.CUED ||
@@ -27,7 +27,7 @@
           ) {
             player.loadVideoById(params.id,0,"large");
             console.log("Plaing",params);
-            socket.emit("command","videoplaying",{key:ADMIN_KEY});
+            socket.emit("command","playerVideoPlaying",{key:ADMIN_KEY});
           }
         }
       })
@@ -56,7 +56,7 @@
       }
 
       function getNextVideo(){
-        socket.emit("command","nextsong",{key:ADMIN_KEY})
+        socket.emit("command","playerNextVideo",{key:ADMIN_KEY})
       }
 
     </script>

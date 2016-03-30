@@ -52,21 +52,6 @@
 				</div>
 			</li>
 	</script>
-	<script type="text/html" id="tmpl-tweet-legacy">
-			<li class="tweetstream__item tweet">
-				<img class="tweet__avatar" src="{{avatar}}" alt="">
-				<div class="tweet__container">
-					<div class="tweet__body">
-						<div class="tweet__content">
-							{{content}}
-						</div>
-						<div class="tweet__metadata">
-							@{{user}} &middot; <time data-timeago datetime="{{time}}">{{time}}</time>
-						</div>
-					</div>
-				</div>
-			</li>
-	</script>
 	<script type="text/html" id="tmpl-schedule">
 		<span class="schedule__event"><strong><time data-timeago datetime="{{humanTime}}">{{humanTime}}</time></strong>&ensp;&middot;&ensp;{{event}}</span>
 	</script>
@@ -76,7 +61,13 @@
 	<script src="/dst/js/scripts.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 	<script>
- 		var socket = io();
+	
+$(document).ready(function() {
+	bb.stream.init();
+	bb.tweetstream.init();
+	bb.schedule.init();
+});
+ 		var socket = io(window.location.href);
  		socket.on("command", function(cmd, params) {
  			switch(cmd) {
  				case "streamToggle": bb.stream.toggle(); break;
