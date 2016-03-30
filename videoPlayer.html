@@ -23,7 +23,7 @@
         if (cmd == "playsong"){
           player.loadVideoById(params.id,0,"large");
           console.log("Plaing",params);
-          io.emit("command","videoplaying",{key:ADMIN_KEY});
+          socket.emit("command","videoplaying",{key:ADMIN_KEY});
         }
       })
 
