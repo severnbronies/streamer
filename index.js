@@ -48,7 +48,7 @@ app.use("/service", express.static("service"));
 //Requests System
 
 var requestQueue = [],
-		requestSet   = [];
+		requestSet   = {};
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/requests.html");
