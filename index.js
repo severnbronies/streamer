@@ -100,7 +100,7 @@ app.get("/request",function(req,res) {
 });
 
 function playNextSong(){
-	var song = requestQueue.unshift();
+	var song = requestQueue.shift();
 	requestSet[song.type+"::"+song.id] = undefined;
 	io.emit("command", "playsong", song);
 	console.log("Playing song",song);
