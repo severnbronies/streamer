@@ -45,6 +45,19 @@ app.use("/assets", express.static("assets"));
 app.use("/screens", express.static("screens"));
 app.use("/service", express.static("service"));
 
+//Admin check system
+var adminAuth = function(req, res, next) {
+  var user = auth(req);
+  if (user === undefined || user.name !== 'admin' || user.pass !== settings.adminPassword) {
+    res.statusCode = 401;
+    res.setHeader('WWW-Authenticate', 'Basic realm="Severn Bronies Streamer Admin Interface"');
+    res.end('Unauthorized');
+  } else {
+    next();
+  }
+};
+var adminKey = (Math.random().toString(36)+'00000000').slice(2, 8+2);
+
 //Requests System
 
 var requestQueue = [],
@@ -88,27 +101,18 @@ app.get("/request",function(req,res) {
 
 function playNextSong(){
 	var song = requestQueue.unshift();
-	requestSet[song] = undefined;
+	requestSet[song.type+"::"+song.id] = undefined;
 	io.emit("command", "playsong", song);
 }
+
+app.get("/player", adminAuth,function(req,res) {
+	res.sendFile(__dirname + "/videoPlayer.html");
+});
 
 app.get("/projector", function(req, res) {
 	res.sendFile(__dirname + "/projector.html");
 });
 
-
-var adminAuth = function(req, res, next) {
-  var user = auth(req);
-  if (user === undefined || user.name !== 'admin' || user.pass !== settings.adminPassword) {
-    res.statusCode = 401;
-    res.setHeader('WWW-Authenticate', 'Basic realm="Severn Bronies Streamer Admin Interface"');
-    res.end('Unauthorized');
-  } else {
-    next();
-  }
-};
-
-var adminKey = (Math.random().toString(36)+'00000000').slice(2, 8+2);
 app.get("/admin", adminAuth, function(req, res) {
 	res.sendFile(__dirname+"/admin.html");
 });
