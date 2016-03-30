@@ -57,12 +57,26 @@
 				</form>
 			</div>
 		</div>
+		<div class="accordion__section">
+			<input class="accordion__radio" type="radio" name="accordion" id="message">
+			<label class="accordion__title" for="message">Song Request Queue</label>
+			<div class="accordion__content">
+
+			</div>
+		</div>
 	</div>
 
 	<script src="/assets/js/vendor.min.js"></script>
 	<script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
 	<script>
  		var socket = io();
+		socket.on("command",function(cmd,params){
+			switch (cmd){
+				case "newRequest":
+					console.log("new song",params);
+					break
+			}
+		})
  		$("[data-command]").on("click", function(e) {
  			e.preventDefault();
 			var data = $(this).attr("data-params");

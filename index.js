@@ -30,7 +30,7 @@ io.sockets.on("connection", function(socket) {
 			delete params.key;
 			if (cmd == "alert"){
 				io.emit("alert",params.text);
-			} else if (cmd == "nextSong") {
+			} else if (cmd == "nextsong") {
 				playNextSong();
 			} else {
 				io.emit("command", cmd, params);
@@ -71,6 +71,9 @@ app.get("/request",function(req,res) {
 	var status = requestSet[songRequest];
 	if (status === undefined){
 		requestQueue.push();
+		requestSet[songRequest] = true;
+		io.emit("command", "newRequest", songRequest);
+		console.log("New request",songRequest);
 		res.send({added:true});
 	} else if (status === true){
 		res.send({added:false,error:"Song is already in queue"});
