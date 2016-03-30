@@ -68,10 +68,11 @@ app.get("/request",function(req,res) {
 		return;
 	}
 
-	var status = requestSet[songRequest];
+	var reqKey = songRequest.type+"::"+songRequest.id,
+			status = requestSet[reqKey];
 	if (status === undefined){
 		requestQueue.push();
-		requestSet[songRequest] = true;
+		requestSet[reqKey] = true;
 		io.emit("command", "newRequest", songRequest);
 		console.log("New request",songRequest);
 		res.send({added:true});
