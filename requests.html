@@ -116,7 +116,15 @@
 
 		$("#results").on("click",".submitRequest",function(e){
 			var $t = $(this);
-			$.get("request",{type:$t.attr("data-type"),id:$t.attr("data-id")})
+			console.log($t);
+			$.getJSON("request",{type:$t.attr("data-type"),id:$t.attr("data-id")},function(resp){
+				if (resp.added){
+					$t.text("Song Added");
+				} else {
+					$t.text("Error:"+resp.error)
+				}
+				$t.attr("disabled",1)
+			})
 			e.preventDefault();
 		})
 	</script>

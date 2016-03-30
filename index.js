@@ -77,8 +77,10 @@ app.get("/request",function(req,res) {
 		res.send({added:true});
 	} else if (status === true){
 		res.send({added:false,error:"Song is already in queue"});
+		console.log("Repeat request",songRequest);
 	} else if (status === false){
 		res.send({added:false,error:"Song has been banned"});
+		console.log("Banned request",songRequest);
 	}
 });
 
