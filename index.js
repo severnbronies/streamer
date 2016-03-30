@@ -116,7 +116,7 @@ function playNextSong(){
 
 function removeNextSong(){
 	var song = requestQueue.shift();
-	requestSet[song.type+"::"+song.id] = undefined;
+	delete requestSet[song.type+"::"+song.id];
 	console.log("Song now playing",song);
 }
 
