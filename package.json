@@ -19,8 +19,10 @@
   "homepage": "https://github.com/severnbronies/streamer",
   "dependencies": {
     "basic-auth": "^1.0.3",
+    "colors": "^1.1.2",
     "express": "^4.13.4",
     "http": "0.0.0",
+    "ip": "^1.1.2",
     "socket.io": "^1.4.5",
     "twitter": "^1.2.5"
   },
