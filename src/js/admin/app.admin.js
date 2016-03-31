@@ -28,10 +28,11 @@ app.admin = function() {
  		});
 	};
 	this.bindSockets = function() {
+		console.log("BIND SOCKETS")
 		globalSocket.on("command", function(cmd, params) {
 			switch(cmd) {
-				case "newRequest":
-					console.log("new song",params);
+				case "playerNewRequest":
+					console.log("new song", params);
 					break;
 			}
 		});

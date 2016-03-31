@@ -29,7 +29,10 @@ app.requests = function() {
 			var $this = $(this);
 			$.getJSON("/request", {
 				type: $this.attr("data-type"),
-				id: $this.attr("data-id")
+				id: $this.attr("data-id"),
+				title: $this.attr("data-title"),
+				description: $this.attr("data-description"),
+				thumbnail: $this.attr("data-thumbnail")
 			}, function(data) {
 				if(data.added) {
 					$this.text("Added to playlist");

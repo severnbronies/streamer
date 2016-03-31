@@ -51,13 +51,13 @@ var adminAuth = function(req, res, next) {
 };
 
 /**
- * Command handler
+ * Command handlers
  */
 
 io.sockets.on("connection", function(socket) {
 	// console.log(log.CONNECTION, "New device connected.");
 	socket.on("command", function(cmd, params) {
-		console.log(log.DEBUG, "Command      :", cmd, params);
+		console.log(log.COMMAND, cmd, params);
 		if(params.key === adminKey) {
 			delete params.key;
 			switch(cmd) {
@@ -76,6 +76,12 @@ io.sockets.on("connection", function(socket) {
 			}
 		}
 	});
+});
+
+io.of("/stream").on("connection", function(socket) {
+	initTweetstream(socket);
+	var showSchedule = new schedule();
+	showSchedule.init(socket);
 });
 
 /**
@@ -120,10 +126,8 @@ var requestQueue = [];
 var requestSet = {};
 
 app.get("/request", function(req, res) {
-	var videoRequest = {
-		type: req.query.type,
-		id: req.query.id
-	};
+	console.log(log.DEBUG, req.query);
+	var videoRequest = req.query;
 	if(typeof videoRequest.id === "undefined") {
 		res.send({ added: false, error: "Missing ID parameter" });
 		return;
@@ -132,7 +136,6 @@ app.get("/request", function(req, res) {
 		res.send({ added: false, error: "Bad/missing type parameter" });
 		return;
 	}
-
 	var reqKey = videoRequest.type + "::" + videoRequest.id;
 	var status = requestSet[reqKey];
 	if(typeof status === "undefined") {
@@ -152,7 +155,6 @@ app.get("/request", function(req, res) {
 		res.send({ added: false, error: "Video has been banned" });
 		console.log(log.PLAYER, "Banned video requested:", videoRequest.id);
 	}
-	console.log(log.DEBUG, requestQueue);
 });
 
 var player = {
@@ -219,7 +221,6 @@ function schedule() {
 		globalSocket = socket;
 		self.update();
 		setInterval(self.update, 30000); // 30 seconds
-		console.log(log.DEBUG, lastTimestamp, hidden);
 	};
 	this.update = function() {
 		var found = false;
@@ -236,22 +237,14 @@ function schedule() {
 						timestamp: new Date(settings.schedule[i].timestamp).toISOString()
 					};
 					console.log(log.SCHEDULE, "Updating schedule to '" + params.name + "'.");
-					console.log(log.DEBUG, params);
 					globalSocket.emit("schedule", params);
 				}
 			}
 		}
 		if(found === false && hidden === false) {
 			console.log(log.SCHEDULE, "Schedule empty. Hiding.");
-			console.log(log.DEBUG, { hidden: true });
 			globalSocket.emit("schedule", { hidden: true });
 			hidden = true;
 		}
 	};
 };
-
-io.of("/stream").on("connection", function(socket) {
-	initTweetstream(socket);
-	var showSchedule = new schedule();
-	showSchedule.init(socket);
-});

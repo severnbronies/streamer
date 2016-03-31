@@ -35,7 +35,7 @@
 			<h1>{{title}}</h1>
 			<img src="{{thumbnail}}" style="float:left">
 			<div style="clear:left">{{description}}</div>
-			<button class="submitRequest" type="button" data-id="{{id}}" data-type="{{type}}">Request</button>
+			<button class="submitRequest" type="button" data-id="{{id}}" data-title="{{title}}" data-thumbnail="{{thumbnail}}" data-description="{{description}}" data-type="{{type}}">Request</button>
 		</div>
 	</script>
 
@@ -45,92 +45,6 @@
 			var requests = new app.requests();
 			requests.init();
 		});
-		// function addSongs(items,loadNextPage){
-		// 	var template = $("#tmlp-song").html();
-		// 	$.each(items,function(){
-		// 		$("#results").append(
-		// 			$("<li>").html(Mustache.render(template,this))
-		// 		)
-		// 	});
-		// 	$("#more").off("click").one("click",loadNextPage);
-		// }
-
-		// var youtubeSearch = function(query,pageToken){
-		// 	var API_KEY = 'AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA';
-		// 	var API_ENDPOINT= 'https://www.googleapis.com/youtube/v3/search';
-		// 	var params = {
-		// 		q: query,
-		// 		pageToken: pageToken,
-		// 		part: "snippet",
-		// 		key: API_KEY,
-		// 		maxResults: 20,
-		// 		type:"video"
-		// 	};
-		// 	$.getJSON(API_ENDPOINT,params,function(resp){
-		// 		var items = $.map(resp.items,function(v){
-		// 			return {
-		// 				title: v.snippet.title,
-		// 				thumbnail: v.snippet.thumbnails.default.url,
-		// 				description: v.snippet.description,
-		// 				id: v.id.videoId,
-		// 				type: "youtube"
-		// 			}
-		// 		})
-		// 		addSongs(items,function(){youtubeSearch(query,resp.nextPageToken)})
-		// 	})
-		// }
-
-		// var soundcloudSearch = function(query,offset){
-		// 	var API_KEY = "fbab4fa264979594df9f5cda9fd1fa3d";
-		// 	var API_ENDPOINT = "https://api.soundcloud.com/tracks";
-		// 	if(offset === undefined){
-		// 		offset=0
-		// 	}
-		// 	var params = {
-		// 		q: query,
-		// 		offset:offset,
-		// 		client_id: API_KEY
-		// 	};
-		// 	$.getJSON(API_ENDPOINT,params,function(resp){
-		// 		var items = $.map(resp,function(v){
-		// 			return {
-		// 				title: v.title,
-		// 				thumbnail: v.artwork_url,
-		// 				description: v.description,
-		// 				id: v.id,
-		// 				type: "soundcloud"
-		// 			}
-		// 		})
-		// 		addSongs(items,function(){soundcloudSearch(query,offset+items.length)})
-		// 	})
-		// }
-
-		// $("#search").on("submit",function(e){
-		// 	$("#results").empty();
-		// 	var $t = $(this),
-		// 			query = $t.find("[name=search]").val(),
-		// 			service = $t.find("[name=service]").val();
-		// 	switch (service){
-		// 		case "youtube": youtubeSearch(query); break;
-		// 		case "soundcloud": soundcloudSearch(query); break;
-		// 		default: console.warn("Bad Service",service);
-		// 	}
-		// 	e.preventDefault();
-		// })
-
-		// $("#results").on("click",".submitRequest",function(e){
-		// 	var $t = $(this);
-		// 	console.log($t);
-		// 	$.getJSON("/request",{type:$t.attr("data-type"),id:$t.attr("data-id")},function(resp){
-		// 		if (resp.added){
-		// 			$t.text("Song Added");
-		// 		} else {
-		// 			$t.text("Error:"+resp.error)
-		// 		}
-		// 		$t.attr("disabled",1)
-		// 	})
-		// 	e.preventDefault();
-		// })
 	</script>
 
 </body>
