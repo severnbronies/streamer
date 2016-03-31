@@ -1,65 +1,27 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <style>
-      html,body,#player{
-        margin:0;
-        padding:0;
-        width:100%;
-        height:100%;
-        font-size:0;
-        overflow:hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="player"></div>
-    <script src="/adminKey"></script>
-    <script src="https://cdn.socket.io/socket.io-1.3.5.js"></script>
-    <script>
-      var socket = io();
-      socket.on("command",function(cmd,params){
-        if (cmd == "playerPlayVideo"){
-          var pState = player.getPlayerState();
-          if (pState == YT.PlayerState.ENDED ||
-            pState == YT.PlayerState.CUED ||
-            params.force
-          ) {
-            player.loadVideoById(params.id,0,"large");
-            console.log("Plaing",params);
-            socket.emit("command","playerVideoPlaying",{key:ADMIN_KEY});
-          }
-        }
-      })
-
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '100%',
-          width: '100%',
-          events: {
-            'onReady': getNextVideo,
-            'onStateChange': onPlayerStateChange
-          },playerVars:{
-            showinfo:0,
-            rel:0,
-            modestbranding:1
-          }
-        });
-      }
-
-      // When finished request a new song
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.ENDED) {
-          getNextVideo();
-        }
-      }
-
-      function getNextVideo(){
-        socket.emit("command","playerNextVideo",{key:ADMIN_KEY})
-      }
-
-    </script>
-    <script src="https://www.youtube.com/iframe_api"></script>
-  </body>
+<head>
+	<style>
+		html,body,#player{
+			margin:0;
+			padding:0;
+			width:100%;
+			height:100%;
+			font-size:0;
+			overflow:hidden;
+		}
+	</style>
+</head>
+<body>
+	<div id="player"></div>
+	<script src="/adminKey"></script>
+	<script src="https://www.youtube.com/iframe_api"></script>
+	<script src="/dst/js/player.js"></script>
+	<script>
+		$(document).ready(function() {
+			var player = new app.player();
+			player.init();
+		});
+	</script>
+</body>
 </html>

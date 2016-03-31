@@ -1,9 +1,0 @@
-{ "schedule":
-	[
-		{"timestamp": "2016-03-26T11:00:00", "event": "Starbucks"},
-		{"timestamp": "2016-03-26T11:30:00", "event": "The Knights Templar"},
-		{"timestamp": "2016-03-26T13:30:00", "event": "Hydra Books"},
-		{"timestamp": "2016-03-26T15:00:00", "event": "THE SEASON SIX PREMIERE EPISODES!!!!"},
-		{"timestamp": "2016-03-26T17:30:00", "event": "Forbidden Planet"}
-	]
-}

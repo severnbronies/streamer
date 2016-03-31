@@ -65,10 +65,10 @@ io.sockets.on("connection", function(socket) {
 					io.emit("alert", params.text);
 					break;
 				case "playerNextVideo":
-					playerPlayNextVideo();
+					player.playNextVideo();
 					break;
 				case "playerVideoPlaying":
-					playerRemoveNextVideo();
+					player.removeNextVideo();
 					break;
 				default:
 					io.emit("command", cmd, params);
@@ -91,7 +91,6 @@ app.use(function(req, res, next) {
 
 app.use("/dst", express.static("dst"));
 app.use("/screens", express.static("screens"));
-app.use("/service", express.static("service"));
 
 app.get("/", function(req, res) {
 	res.sendFile(__dirname + "/requests.html");
@@ -139,7 +138,7 @@ app.get("/request", function(req, res) {
 	if(typeof status === "undefined") {
 		requestSet[reqKey] = true;
 		if(requestQueue.push(videoRequest) === 1) {
-			playerPlayNextVideo();
+			player.playNextVideo();
 		}
 		io.emit("command", "playerNewRequest", videoRequest);
 		console.log(log.PLAYER, "New video requested:", videoRequest.id);
@@ -156,55 +155,103 @@ app.get("/request", function(req, res) {
 	console.log(log.DEBUG, requestQueue);
 });
 
-function playerPlayNextVideo(){
-	if(requestQueue.length === 0){
-		console.log(log.PLAYER, "Queue empty.");
-		return;
+var player = {
+	playNextVideo: function(){
+		if(requestQueue.length === 0){
+			console.log(log.PLAYER, "Queue empty.");
+			return;
+		}
+		var video = requestQueue[0];
+		io.emit("command", "playerPlayVideo", video);
+		console.log(log.PLAYER, "Sending video to player:", video);
+	},
+	removeNextVideo: function(){
+		var video = requestQueue.shift();
+		delete requestSet[video.type + "::" + video.id];
+		console.log(log.PLAYER, "Now playing:", video);
 	}
-	var video = requestQueue[0];
-	io.emit("command", "playerPlayVideo", video);
-	console.log(log.PLAYER, "Sending video to player:", video);
-}
-
-function playerRemoveNextVideo(){
-	var video = requestQueue.shift();
-	delete requestSet[video.type + "::" + video.id];
-	console.log(log.PLAYER, "Now playing:", video);
-}
+};
 
 /**
  * Twitter streamin'
  */
 
+function initTweetstream(socket) {
+	console.log(log.TWITTER, "Initialising tweetstream.");
+	var twitterClient = new twitter({
+		consumer_key: settings.twitterConsumerKey,
+		consumer_secret: settings.twitterConsumerSecret,
+		access_token_key: settings.twitterAccessKey,
+		access_token_secret: settings.twitterAccessSecret
+	});
+	twitterClient.get("search/tweets", { q: settings.twitterSearchArchive }, function(error, tweets, response) {
+		if(error) {
+			console.log(log.ERROR, "Twitter REST API returned error:", error);
+			return;
+		}
+		tweets = tweets.statuses.reverse();
+		for(var i = 0; i < tweets.length; i++) {
+			console.log(log.TWITTER, "@" + tweets[i].user.screen_name + ":", tweets[i].text);
+			socket.emit("tweet", tweets[i]);
+		}
+	});
+	twitterClient.stream("statuses/filter", { track: settings.twitterSearchLive, follow: settings.twitterId }, function(stream) {
+		stream.on("data", function(tweet) {
+			console.log(log.TWITTER, "@" + tweet.user.screen_name + ":", tweet.text);
+			socket.emit("tweet", tweet);
+		});
+		stream.on("error", function(error) {
+			console.log(log.ERROR, "Twitter streaming API returned error:", error);
+		});
+	});
+}
+
+/**
+ * Schedule
+ */
+
+function schedule() {
+	var self = this;
+	var lastTimestamp = 0;
+	var hidden = false;
+	var globalSocket;
+	this.init = function(socket) {
+		globalSocket = socket;
+		self.update();
+		setInterval(self.update, 30000); // 30 seconds
+		console.log(log.DEBUG, lastTimestamp, hidden);
+	};
+	this.update = function() {
+		var found = false;
+		var timeNow = Math.round(new Date().getTime() / 1000);
+		for(var i = 0; i < settings.schedule.length; i++) {
+			var timeEvent = Math.round(new Date(settings.schedule[i].timestamp).getTime() / 1000);
+			if(found == false && timeEvent >= timeNow) {
+				found = true;
+				if(lastTimestamp != settings.schedule[i].timestamp) {
+					lastTimestamp = settings.schedule[i].timestamp;
+					var params = {
+						hidden: false,
+						name: settings.schedule[i].event,
+						timestamp: new Date(settings.schedule[i].timestamp).toISOString()
+					};
+					console.log(log.SCHEDULE, "Updating schedule to '" + params.name + "'.");
+					console.log(log.DEBUG, params);
+					globalSocket.emit("schedule", params);
+				}
+			}
+		}
+		if(found === false && hidden === false) {
+			console.log(log.SCHEDULE, "Schedule empty. Hiding.");
+			console.log(log.DEBUG, { hidden: true });
+			globalSocket.emit("schedule", { hidden: true });
+			hidden = true;
+		}
+	};
+};
+
 io.of("/stream").on("connection", function(socket) {
 	initTweetstream(socket);
-	function initTweetstream(socket) {
-		console.log(log.TWITTER, "Initialising tweetstream.");
-		var twitterClient = new twitter({
-			consumer_key: settings.twitterConsumerKey,
-			consumer_secret: settings.twitterConsumerSecret,
-			access_token_key: settings.twitterAccessKey,
-			access_token_secret: settings.twitterAccessSecret
-		});
-		twitterClient.get("search/tweets", { q: settings.twitterSearchArchive }, function(error, tweets, response) {
-			if(error) {
-				console.log(log.ERROR, "Twitter REST API returned error:", error);
-				return;
-			}
-			tweets = tweets.statuses.reverse();
-			for(var i = 0; i < tweets.length; i++) {
-				console.log(log.TWITTER, "@" + tweets[i].user.screen_name + ":", tweets[i].text);
-				socket.emit("tweet", tweets[i]);
-			}
-		});
-		twitterClient.stream("statuses/filter", { track: settings.twitterSearchLive, follow: settings.twitterId }, function(stream) {
-			stream.on("data", function(tweet) {
-				console.log(log.TWITTER, "@" + tweet.user.screen_name + ":", tweet.text);
-				socket.emit("tweet", tweet);
-			});
-			stream.on("error", function(error) {
-				console.log(log.ERROR, "Twitter streaming API returned error:", error);
-			});
-		});
-	}
+	var showSchedule = new schedule();
+	showSchedule.init(socket);
 });
