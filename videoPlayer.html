@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
 <head>
 	<style>
@@ -14,11 +14,11 @@
 </head>
 <body>
 	<div id="player"></div>
-	<script src="/adminKey"></script>
 	<script src="https://www.youtube.com/iframe_api"></script>
+	<script src="/adminKey"></script>
 	<script src="/dst/js/player.js"></script>
 	<script>
-		$(document).ready(function() {
+		$(window).load(function() {
 			var player = new app.player();
 			player.init();
 		});

@@ -1,0 +1,58 @@
+.content {
+	line-height: 1.4;
+	p,
+	ul,
+	ol,
+	dl,
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-top: 18px;
+		margin-bottom: 18px;
+	}
+	ul,
+	ol {
+		padding-left: 2em;
+	}
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		line-height: 1.15;
+	}
+	a {
+		color: inherit;
+		text-decoration: none;
+		transition: box-shadow .2s ease;
+		box-shadow: inset 0 -.1em 0 0 palette(severn, light); 
+		&:hover,
+		&:focus {
+			box-shadow: inset 0 -.2em 0 0 palette(severn, light); 
+		}
+	}
+	small,
+	del {
+		color: mix(#fff, #212121, 40%);
+	}
+	ins {
+		font-weight: bold;
+		text-decoration: none;
+	}
+	blockquote {
+		margin-left: 17px;
+		padding-left: 20px;
+		border-width: 0;
+		border-left-width: 3px;
+		border-style: solid;
+		@each $locale, $color in $palette-locales {
+			[data-theme="#{$locale}"] & {
+				border-color: palette($locale, light); 
+			}
+		}
+	}
+}

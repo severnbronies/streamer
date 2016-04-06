@@ -1,0 +1,77 @@
+.tweetstream {
+	&__header {
+		display: none;
+	}
+	&__list {
+		display: flex;
+		flex-direction: column;
+		flex-wrap: nowrap;
+		padding: 20px;
+		overflow: auto;
+		@include mq(tweetHoriz) {
+			flex-direction: row;
+		}
+	}
+	&__item {
+		min-width: 360px;
+		animation-name: animate-in-left;
+		animation-duration: 1.2s;
+		animation-timing-function: $animation-easing;
+		animation-fill-mode: both;
+		&:nth-child(n+2) {
+			margin-top: 20px;
+			@include mq(tweetHoriz) {
+				margin-top: 0;
+				margin-left: 20px;
+			}
+		}
+	}
+}
+
+.tweet {
+	&__avatar {
+		width: 48px;
+		float: left;
+	}
+	&__container {
+		margin-left: 53px;
+		position: relative;
+		&:before {
+			content: "";
+			display: block;
+			width: 0;
+			height: 0;
+			position: absolute;
+			top: 0;
+			right: 100%;
+			border-style: solid;
+			border-width: 0 12px 12px 0;
+			border-color: transparent #fff transparent transparent;
+		}
+	}
+	&__body {
+		min-height: 48px;
+		padding: 10px;
+		background-color: #fff;
+		font-size: em-calc(15px);
+		@include mq(tweetHoriz) {
+			display: inline-block;
+		}
+	}
+	&__content {
+
+	}
+	&__metadata {
+		margin-top: 4px;
+		font-size: em-calc(13px, 15px);
+		color: mix(#fff, #212121, 40%);
+	}
+	&__user {
+		&::after {
+			content: " // ";
+		}
+	}
+	&__timestamp {
+
+	}
+}

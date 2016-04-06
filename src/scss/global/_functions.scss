@@ -1,0 +1,41 @@
+// Colour palette management
+@function palette($section, $color, $tone: false) {
+	@if $tone {
+		@return map-get(map-get(map-get($palette, $section), $color), $tone);
+	}
+	@else {
+		@return map-get(map-get($palette, $section), $color);
+	}
+}
+
+// Strip units from values
+@function strip-unit($num) {
+	@return $num / ($num * 0 + 1);
+}
+
+// Convert pixels to ems
+@function convert-to-em($value, $base-value: $global-base)  {
+	$value: strip-unit($value) / strip-unit($base-value) * 1em;
+	@if ($value == 0rem) { $value: 0; } // Turn 0rem into 0
+	@return $value;
+}
+
+@function em-calc($values, $base-value: $base-font-size) {
+	$max: length($values);
+	@if $max == 1 { @return convert-to-em(nth($values, 1), $base-value); }
+	$emValues: ();
+	@for $i from 1 through $max {
+		$emValues: append($emValues, convert-to-em(nth($values, $i), $base-value));
+	}
+	@return $emValues;
+}
+
+// Return black or white to complement variably coloured backgrounds
+@function black-or-white($color) {
+	@if (lightness($color) > 50) {
+		@return #000;
+	}
+	@else {
+		@return #fff;
+	}
+}

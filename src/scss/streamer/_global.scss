@@ -1,0 +1,37 @@
+html,
+body {
+	background-color: palette(severn, base);
+}
+
+.streamer {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: nowrap;
+	@include mq(widescreen) {
+		flex-direction: row;
+		flex-wrap: wrap;
+	}
+	&__stream {
+		width: 100%;
+		order: 1;
+		@include mq(widescreen) {
+			width: 82%;
+		}
+	}
+	&__tweetstream {
+		width: 100%;
+		order: 2;
+		@include mq(widescreen) {
+			order: 3;
+		}
+	}
+	&__schedule {
+		width: 100%;
+		order: 3;
+		@include mq(widescreen) {
+			position: relative;
+			order: 2;
+			width: 18%;
+		}
+	}
+}

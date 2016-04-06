@@ -1,0 +1,78 @@
+.schedule {
+	color: #fff;
+	background-color: palette(bristol, base);
+	position: fixed;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	overflow: hidden;
+	@include mq(widescreen) {
+		position: absolute;
+		top: 0;
+	}
+	&__label {
+		display: inline-block;
+		padding: 10px 20px;
+		background-color: palette(bristol, darkest);
+		font-size: em-calc(16px);
+		letter-spacing: em-calc(1px, 16px);
+		text-transform: uppercase;
+		@include mq(widescreen) {
+			display: block;
+		}
+	}
+	&__list {
+		display: inline;
+		padding-right: 20px;
+		padding-left: 20px;
+		list-style: none;
+		@include mq(widescreen) {
+			display: block;
+			padding-top: 20px;
+			padding-bottom: 20px;
+		}
+	}
+	&__item {
+		display: inline-block;
+		animation-name: animate-in-bottom;
+		animation-duration: 1.2s;
+		animation-timing-function: $animation-easing;
+		animation-fill-mode: both;
+		@include mq(widescreen) {
+			margin-bottom: 30px;
+		}
+		&:nth-child(n+2) {
+			display: none;
+			@include mq(widescreen) {
+				display: inline-block;
+			}
+		}
+		@for $i from 1 through 5 {
+			&:nth-child(#{$i}) {
+				animation-delay: (.1s * $i);
+				> * {
+					opacity: (1 - ($i / 5) + 0.2);
+				}
+			}
+		}
+	}
+	&__timestamp {
+		@include mq(widescreen) {
+			display: block;
+			margin-bottom: 4px;
+		}
+		&::after {
+			content: " // ";
+			@include mq(widescreen) {
+				content: none;
+			}
+		}
+	}
+	&__name {
+		font-weight: bold;
+		@include mq(widescreen) {
+			display: block;
+			font-size: 2.3vmax;
+		}
+	}
+}

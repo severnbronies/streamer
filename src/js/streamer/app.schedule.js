@@ -7,11 +7,15 @@ app.schedule = function() {
 		scheduleTemplate = $("#tmpl-schedule").html();
 		Mustache.parse(scheduleTemplate);
 	};
-	this.update = function(event) {
-		$("[data-schedule-content]").fadeOut(function() {
-			$(this).html(Mustache.render(scheduleTemplate, event)).fadeIn();
+	this.update = function(events) {
+		var $schedule = $("[data-schedule-content]");
+		$schedule.empty();
+		console.log(events);
+		$.each(events, function(i, event) {
+			if(i < 4) {
+				$schedule.append(Mustache.render(scheduleTemplate, event));
+			}
 		});
-		self.toggle(event.hidden);
 	};
 	this.toggle = function(hidden) {
 		if(hidden === true) {

@@ -1,5 +1,6 @@
 var gulp = require("gulp");
 var sass = require("gulp-sass");
+var autoprefixer = require("gulp-autoprefixer");
 var concat = require("gulp-concat");
 var uglify = require("gulp-uglify");
 var newer = require("gulp-newer");
@@ -20,6 +21,12 @@ gulp.task("stylesheets", function() {
 		{
 			errLogToConsole: true,
 			outputStyle: "compressed"
+		}
+	))
+	.pipe(autoprefixer(
+		{
+			browsers: ['last 2 version'],
+			cascade: true
 		}
 	))
 	.pipe(gulp.dest("./dst/css"))

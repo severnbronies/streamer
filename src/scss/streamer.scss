@@ -1,9 +1,7 @@
-$bb-red: #2b2e4a;
-$bb-red-dark: #e84545;
-$bb-faded: #323232;
+@import "base";
 
-@import "parts/global";
-@import "parts/stream";
-@import "parts/tweetstream";
-@import "parts/schedule";
-@import "parts/message";
+@import "streamer/global";
+@import "streamer/stream";
+@import "streamer/tweetstream";
+@import "streamer/schedule";
+@import "streamer/message";

@@ -1,0 +1,53 @@
+// Settings - Breakpoints
+// TODO: Work out ~16:9 and ~4:3 breakpoints
+$breakpoints: (
+	widescreen: "only screen and (min-aspect-ratio: 13/9)",
+	tweetHoriz: "only screen and (min-aspect-ratio: 11/9)"
+);
+
+// Settings - Animation
+$animation-easing: cubic-bezier(.785, .135, .150, .860);
+
+// Settings - Colours
+$palette-locales: (
+	severn: #2b2e4a,
+	bristol: #f44336,
+	cardiff: #3f51b5,
+	weston-super-mare: #ffc107,
+	newport: #009688
+);
+
+$palette: (
+	context: (
+		accessibility: #fc0,
+		live: #c00
+	),
+	social: (
+		twitter: #55acee,
+		facebook: #3b5998,
+		tumblr: #35465c,
+		github: #333
+	)
+);
+
+@each $locale, $color in $palette-locales {
+	$map: (
+		#{$locale}: (
+			base: $color,
+			darker: mix(#000, $color, 20%),
+			darkest: mix(#000, $color, 40%),
+			light: mix(#fff, $color, 70%),
+		)
+	);
+	$palette: map_merge($palette, $map);
+}
+
+// Settings - Typography
+$base-font-size: 16px;
+
+// Global styles
+@import "global/functions";
+@import "global/mixins";
+@import "global/base";
+@import "global/animation";
+@import "global/content";

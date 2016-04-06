@@ -214,37 +214,35 @@ function initTweetstream(socket) {
 
 function schedule() {
 	var self = this;
-	var lastTimestamp = 0;
-	var hidden = false;
 	var globalSocket;
+	var lastValidCount = 0;
+	var schedule = settings.schedule;
 	this.init = function(socket) {
 		globalSocket = socket;
 		self.update();
-		setInterval(self.update, 30000); // 30 seconds
+		setInterval(self.update, 30000);
 	};
 	this.update = function() {
-		var found = false;
+		var returnData = [];
+		var validCount = 0;
 		var timeNow = Math.round(new Date().getTime() / 1000);
-		for(var i = 0; i < settings.schedule.length; i++) {
-			var timeEvent = Math.round(new Date(settings.schedule[i].timestamp).getTime() / 1000);
-			if(found == false && timeEvent >= timeNow) {
-				found = true;
-				if(lastTimestamp != settings.schedule[i].timestamp) {
-					lastTimestamp = settings.schedule[i].timestamp;
-					var params = {
-						hidden: false,
-						name: settings.schedule[i].event,
-						timestamp: new Date(settings.schedule[i].timestamp).toISOString()
-					};
-					console.log(log.SCHEDULE, "Updating schedule to '" + params.name + "'.");
-					globalSocket.emit("schedule", params);
-				}
+		for(var i = 0; i < schedule.length; i++) {
+			var timeEvent = Math.round(new Date(schedule[i].timestamp).getTime() / 1000);
+			if(timeEvent >= timeNow) {
+				validCount++;
+				returnData.push({
+					name: schedule[i].event,
+					timestamp: new Date(schedule[i].timestamp).toISOString()
+				});
 			}
 		}
-		if(found === false && hidden === false) {
-			console.log(log.SCHEDULE, "Schedule empty. Hiding.");
-			globalSocket.emit("schedule", { hidden: true });
-			hidden = true;
+		if(validCount !== lastValidCount) {
+			console.log(log.SCHEDULE, "Updating schedule.");
+			lastValidCount = validCount;
+			globalSocket.emit("schedule", returnData);
+		}
+		if(validCount === 0) {
+			console.log(log.SCHEDULE, "Schedule empty.");
 		}
 	};
-};
+}
