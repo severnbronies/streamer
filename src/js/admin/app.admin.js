@@ -24,7 +24,7 @@ app.admin = function() {
  		});
  		$(document).on("submit", "[data-stream-alert]", function(e) {
  			e.preventDefault();
- 			globalSocket.emit("command", "alert",{"text": $(this).find("input").val(), key: ADMIN_KEY });
+ 			globalSocket.emit("command", "alert", { text: $(this).find("input").val(), duration: 5, key: ADMIN_KEY });
  		});
 	};
 	this.bindSockets = function() {

@@ -33,6 +33,9 @@ app.streamer = function() {
 				case "scheduleToggle":
 					schedule.toggle();
 					break;
+				case "alert":
+					alert.message(params.text, params.duration);
+					break;
 			}
 		});
 		globalSocket.on("alert", function(msg) {

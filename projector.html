@@ -59,7 +59,12 @@
 	</script>
 
 	<script type="text/html" id="tmpl-message">
-		<div class="message">{{message}}</div>
+		<div class="message" data-message>
+			<div class="message__spacer"></div>
+			<div class="message__inner" data-message-content>
+				{{text}}
+			</div>
+		</div>
 	</script>
 
 	<script src="/dst/js/streamer.js"></script>
