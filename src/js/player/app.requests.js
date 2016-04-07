@@ -4,7 +4,7 @@ app.requests = function() {
 	var self = this;
 	var resultTemplate;
 	this.init = function() {
-		resultTemplate = $("#tmpl-video").html();
+		resultTemplate = $("#tmpl-result").html();
 		Mustache.parse(resultTemplate);
 		self.bindEvents();
 	};
@@ -14,7 +14,7 @@ app.requests = function() {
 			var $this = $(this);
 			var query = $this.find("[name='search']").val();
 			var service = $this.find("[name='service']").val();
-			$("#results").empty();
+			$(".results").empty();
 			switch(service) {
 				case "youtube":
 					self.searchYouTube(query);
@@ -24,21 +24,24 @@ app.requests = function() {
 					break;
 			}
 		});
-		$(document).on("click", ".submitRequest", function(e) {
+		$(document).on("click", "[data-result]", function(e) {
+
+		});
+		$(document).on("click", "[data-result-request]", function(e) {
 			e.preventDefault();
+			e.stopPropagation();
 			var $this = $(this);
-			$.getJSON("/request", {
-				type: $this.attr("data-type"),
-				id: $this.attr("data-id"),
-				title: $this.attr("data-title"),
-				description: $this.attr("data-description"),
-				thumbnail: $this.attr("data-thumbnail")
-			}, function(data) {
+			var $parent = $this.closest("[data-result]");
+			var request = $.parseJSON($parent.attr("data-result"));
+			console.log(request);
+			$.getJSON("/request", request, function(data) {
 				if(data.added) {
 					$this.text("Added to playlist");
+					$parent.addClass("results__item--positive");
 				}
 				else {
-					$this.text("ERROR: " + data.error);
+					$this.text("An error occurred");
+					$parent.addClass("results__item--negative");
 				}
 				$this.prop("disabled", true);
 			});
@@ -46,8 +49,8 @@ app.requests = function() {
 	};
 	this.addSearchResults = function(items, cbNextPage) {
 		$.each(items, function(i, video) {
-			var result = $("<li/>").html(Mustache.render(resultTemplate, video));
-			$("#results").append(result);
+			video.jsonData = JSON.stringify(video);
+			$(".results").append(Mustache.render(resultTemplate, video));
 		});
 		$("#more").off("click").on("click", cbNextPage);
 	};

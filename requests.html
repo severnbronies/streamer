@@ -3,40 +3,44 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="/dst/css/stylesheet.css">
-	<title>Request Songs</title>
-	<style>
-		body{
-			padding:20px;
-		}
-	</style>
+	<script src="https://use.typekit.net/rvj6shm.js"></script>
+	<script>try{Typekit.load({ async: true });}catch(e){}</script>
+	<link rel="stylesheet" href="/dst/css/player.css">
+	<title>Request a Video</title>
 </head>
-<body>
+<body class="requests">
 
-	<form id="search" class="form">
+	<form id="search" class="form requests__form">
 		<div class="form__row">
 			<div class="form__control">
-				<input class="form__input" name="search" type="search" placeholder="Search For..."/>
+				<input class="form__input" name="search" type="search" placeholder="Search YouTube"/>
 			</div>
-			<button type="submit" class="button button--positive form__submit">Search</button>
+			<button type="submit" class="form__submit">Search</button>
 		</div>
-
-		<select name="service" hidden>
+		<select name="service" style="display:none;">
 			<option value="youtube" selected>Youtube</option>
-			<option value="soundcloud">Soundcloud</option>
 		</select>
 	</form>
-	<div id="results"></div>
-	<button class="button" id="more" type="button">Load More</button>
+	<ul class="results requests__results">
+		
+	</ul>
+	<button class="requests__more" id="more" type="button">Load More</button>
 
 
-	<script type="text/html" id="tmpl-video">
-		<div>
-			<h1>{{title}}</h1>
-			<img src="{{thumbnail}}" style="float:left">
-			<div style="clear:left">{{description}}</div>
-			<button class="submitRequest" type="button" data-id="{{id}}" data-title="{{title}}" data-thumbnail="{{thumbnail}}" data-description="{{description}}" data-type="{{type}}">Request</button>
-		</div>
+	<script type="text/html" id="tmpl-result">
+		<li class="results__item" data-result="{{jsonData}}" tabindex="0">
+			<div class="results__media">
+				<img class="results__thumbnail" src="{{thumbnail}}" alt="{{title}}">
+			</div>
+			<div class="results__body">
+				<h1 class="results__title">{{title}}</h1>
+				<div class="content results__description">{{description}}</div>
+			</div>
+			<button class="results__request" type="button" tabindex="-1" data-result-request>
+				<span class="results__request__icon"></span>
+				Request
+			</button>
+		</li>
 	</script>
 
 	<script src="/dst/js/player.js"></script>
