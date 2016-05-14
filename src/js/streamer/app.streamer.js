@@ -33,13 +33,10 @@ app.streamer = function() {
 				case "scheduleToggle":
 					schedule.toggle();
 					break;
-				case "alert":
-					alert.message(params.text, params.duration);
-					break;
 			}
 		});
-		globalSocket.on("alert", function(msg) {
-			alert.message(msg);
+		globalSocket.on("alert", function(params) {
+			alert.message(params.text, params.duration);
 		});
 		pageSocket.on("tweet", function(tweetData) {
 			twitter.update(tweetData);
@@ -47,5 +44,8 @@ app.streamer = function() {
 		pageSocket.on("schedule", function(params) {
 			schedule.update(params);
 		});
+		pageSocket.on("scheduleHide", function(hideThis) {
+			schedule.hidden(hideThis);
+		})
 	};
 };

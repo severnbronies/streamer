@@ -9,8 +9,9 @@ app.alert = function() {
 		$("body").append(Mustache.render(alertTemplate, { text: "" }));
 	};
 	this.message = function(message, duration) {
+		console.log(message, duration);
 		var $message = $(".message");
-		duration = (typeof duration != 'undefined') ? duration : 5;
+		duration = (typeof duration != 'undefined') ? parseInt(duration) : 5;
 		$("[data-message-content]").text(message);
 		$message.addClass("message--visible");
 		setTimeout(function() {

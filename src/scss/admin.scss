@@ -1,0 +1,77 @@
+@import "base";
+@import "admin/forms";
+
+.admin {
+	padding-top: 60px;
+	background-color: #eee;
+	@include mq(widescreen) {
+		padding-top: 0;
+		padding-left: 180px;
+	}
+	&__section {
+		padding: 20px;
+		display: none;
+		&:target {
+			display: block;
+		}
+	}
+	&__subsection {
+		margin-bottom: 20px;
+		padding: 19px;
+		border: 1px solid #ddd;
+		background-color: #fff;
+	}
+	&__title {
+		margin-bottom: 20px;
+		padding: 0 20px;
+		color: inherit;
+		font-weight: bold;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+	}
+}
+
+.navigation {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	background-color: #fff;
+	overflow: auto;
+	@include mq(widescreen) {
+		width: 180px;
+		right: auto;
+		bottom: 0;
+	}
+	&__list {
+		display: flex;
+		flex-direction: row;
+		flex-wrap: nowrap;
+		list-style: none;
+		@include mq(widescreen) {
+			flex-direction: column;
+		}
+	}
+	&__item {
+		white-space: nowrap;
+	}
+	&__link {
+		display: block;
+		padding: 15px;
+		border-width: 5px;
+		border-style: solid;
+		border-color: transparent;
+		color: inherit;
+		text-transform: uppercase;
+		letter-spacing: 1px;
+		text-decoration: none;
+		&:hover,
+		&:focus {
+			border-bottom-color: #eee;
+			@include mq(widescreen) {
+				border-right-color: #eee;
+				border-bottom-color: transparent;
+			}
+		}
+	}
+}

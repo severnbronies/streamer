@@ -15,6 +15,7 @@ app.requests = function() {
 			var query = $this.find("[name='search']").val();
 			var service = $this.find("[name='service']").val();
 			$(".results").empty();
+			$("#more").hide();
 			switch(service) {
 				case "youtube":
 					self.searchYouTube(query);
@@ -24,23 +25,21 @@ app.requests = function() {
 					break;
 			}
 		});
-		$(document).on("click", "[data-result]", function(e) {
-
-		});
 		$(document).on("click", "[data-result-request]", function(e) {
 			e.preventDefault();
 			e.stopPropagation();
 			var $this = $(this);
+			var $label = $this.find(".results__request__label");
 			var $parent = $this.closest("[data-result]");
 			var request = $.parseJSON($parent.attr("data-result"));
 			console.log(request);
 			$.getJSON("/request", request, function(data) {
 				if(data.added) {
-					$this.text("Added to playlist");
+					$label.text("Added to playlist");
 					$parent.addClass("results__item--positive");
 				}
 				else {
-					$this.text("An error occurred");
+					$label.text("An error occurred");
 					$parent.addClass("results__item--negative");
 				}
 				$this.prop("disabled", true);
@@ -52,7 +51,7 @@ app.requests = function() {
 			video.jsonData = JSON.stringify(video);
 			$(".results").append(Mustache.render(resultTemplate, video));
 		});
-		$("#more").off("click").on("click", cbNextPage);
+		$("#more").show().off("click").on("click", cbNextPage);
 	};
 	this.searchYouTube = function(query, pageToken) {
 		var API_KEY = "AIzaSyDg5EAtlN6aAHNmvcA53iBGPe0Mx0OzvqA";

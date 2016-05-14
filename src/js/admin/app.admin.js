@@ -9,14 +9,21 @@ app.admin = function() {
 		self.bindSockets();
 	};
 	this.bindEvents = function() {
-		$(document).on("click", "[data-command]", function(e) {
+		$(document).on("click", "[name='run-command']", function(e) {
  			e.preventDefault();
-			var data = $(this).attr("data-params");
-			if(typeof data == "undefined") {
-				data = {};
+ 			var $this = $(this)
+ 			var command = $this.attr("data-cmd");
+			var params = $this.attr("data-params");
+			console.log(params);
+			if(typeof params == "undefined") {
+				params = {};
 			}
-			data["key"] = ADMIN_KEY;
- 			globalSocket.emit("command", $(this).attr("data-command"), data);
+			else {
+				params = $.parseJSON(params);
+			}
+			params.key = ADMIN_KEY;
+			console.log("command", command, params);
+ 			globalSocket.emit("command", command, params);
  		});
  		$(document).on("submit", "[data-stream-url]", function(e) {
  			e.preventDefault();
@@ -24,7 +31,11 @@ app.admin = function() {
  		});
  		$(document).on("submit", "[data-stream-alert]", function(e) {
  			e.preventDefault();
- 			globalSocket.emit("command", "alert", { text: $(this).find("input").val(), duration: 5, key: ADMIN_KEY });
+ 			var message = $(this).find("input").val();
+ 			if(message != "") {
+	 			globalSocket.emit("command", "alert", { text: message, duration: $(this).find("select").val(), key: ADMIN_KEY });
+	 			$(this).find("input").val("");
+	 		}
  		});
 	};
 	this.bindSockets = function() {

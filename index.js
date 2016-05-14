@@ -62,7 +62,7 @@ io.sockets.on("connection", function(socket) {
 			delete params.key;
 			switch(cmd) {
 				case "alert":
-					io.emit("alert", params.text);
+					io.emit("alert", params);
 					break;
 				case "playerNextVideo":
 					player.playNextVideo();
@@ -88,12 +88,12 @@ io.of("/stream").on("connection", function(socket) {
  * Routing
  */
 
-app.use(function(req, res, next) {
-	res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
-	res.header("Expires", "-1");
-	res.header("Pragma", "no-cache");
-	next();
-});
+// app.use(function(req, res, next) {
+// 	res.header("Cache-Control", "private, no-cache, no-store, must-revalidate");
+// 	res.header("Expires", "-1");
+// 	res.header("Pragma", "no-cache");
+// 	next();
+// });
 
 app.use("/dst", express.static("dst"));
 app.use("/screens", express.static("screens"));
@@ -126,7 +126,6 @@ var requestQueue = [];
 var requestSet = {};
 
 app.get("/request", function(req, res) {
-	console.log(log.DEBUG, req.query);
 	var videoRequest = req.query;
 	if(typeof videoRequest.id === "undefined") {
 		res.send({ added: false, error: "Missing ID parameter" });
@@ -144,16 +143,16 @@ app.get("/request", function(req, res) {
 			player.playNextVideo();
 		}
 		io.emit("command", "playerNewRequest", videoRequest);
-		console.log(log.PLAYER, "New video requested:", videoRequest.id);
+		console.log(log.PLAYER, "New video requested:",  videoRequest.title + " (" + videoRequest.id + ")");
 		res.send({ added: true });
 	} 
 	else if(status === true) {
 		res.send({ added: false, error: "Video already in playlist" });
-		console.log(log.PLAYER, "Duplicate video requested:", videoRequest.id);
+		console.log(log.PLAYER, "Duplicate video requested:",  videoRequest.title + " (" + videoRequest.id + ")");
 	} 
 	else if(status === false) {
 		res.send({ added: false, error: "Video has been banned" });
-		console.log(log.PLAYER, "Banned video requested:", videoRequest.id);
+		console.log(log.PLAYER, "Banned video requested:",  videoRequest.title + " (" + videoRequest.id + ")");
 	}
 });
 
@@ -165,12 +164,12 @@ var player = {
 		}
 		var video = requestQueue[0];
 		io.emit("command", "playerPlayVideo", video);
-		console.log(log.PLAYER, "Sending video to player:", video);
+		console.log(log.PLAYER, "Sending video to player:", video.title + " (" + video.id + ")");
 	},
 	removeNextVideo: function(){
 		var video = requestQueue.shift();
 		delete requestSet[video.type + "::" + video.id];
-		console.log(log.PLAYER, "Now playing:", video);
+		console.log(log.PLAYER, "Now playing:", video.title + " (" + video.id + ")");
 	}
 };
 
@@ -214,11 +213,11 @@ function initTweetstream(socket) {
 
 function schedule() {
 	var self = this;
-	var globalSocket;
+	var pageSocket;
 	var lastValidCount = 0;
 	var schedule = settings.schedule;
 	this.init = function(socket) {
-		globalSocket = socket;
+		pageSocket = socket;
 		self.update();
 		setInterval(self.update, 30000);
 	};
@@ -239,10 +238,11 @@ function schedule() {
 		if(validCount !== lastValidCount) {
 			console.log(log.SCHEDULE, "Updating schedule.");
 			lastValidCount = validCount;
-			globalSocket.emit("schedule", returnData);
+			pageSocket.emit("schedule", returnData);
 		}
 		if(validCount === 0) {
 			console.log(log.SCHEDULE, "Schedule empty.");
+			pageSocket.emit("scheduleHide", true);
 		}
 	};
 }

@@ -1,0 +1,39 @@
+.form {
+	&__section {
+		&:nth-child(n+2) {
+			padding-top: 20px;
+			margin-top: 20px;
+			border-top: 1px solid #eee;
+		}
+	}
+	&__label {
+		display: block;
+		font-size: .9em;
+		padding: 0 10px 5px;
+	}
+	&__control {
+		display: table;
+	}
+	&__input,
+	&__button {
+		-webkit-appearance: none;
+		display: table-cell;
+		max-width: 100%;
+		min-height: 50px;
+		padding: 10px;
+		border: 1px solid #ddd;
+		font-size: 1.4em;
+	}
+	&__input {
+
+	}
+	&__button {
+		padding: 10px 20px;
+		background-color: #eee;
+		cursor: pointer;
+		&:hover,
+		&:focus {
+			background-color: #ddd;
+		}
+	}
+}

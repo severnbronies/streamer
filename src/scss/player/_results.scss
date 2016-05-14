@@ -34,12 +34,18 @@
 			&:focus {
 				background-color: mix(#000, #3adb76, 10%);
 			}
+			.results__request__icon {
+				@include icon-check(30px, #fff);
+			}
 		}
 		&--negative {
 			color: #fff;
 			background-color: #ec5840;
 			&:focus {
 				background-color: mix(#000, #ec5840, 10%);
+			}
+			.results__request__icon {
+				@include icon-cross(30px, #fff);
 			}
 		}
 	}
@@ -49,23 +55,32 @@
 		transition: transform .5s $animation-easing;
 	}
 	&__media {
-		width: 120px;
+		width: 80px;
 		margin-right: 10px;
 		float: left;
 		line-height: none;
+		@include mq("(min-width: 400px)") {
+			width: 120px;
+		}
 	}
 	&__thumbnail {
-		
+		width: 100%;
 	}
 	&__body {
-		margin-left: 130px;
+		margin-left: 90px;
+		@include mq("(min-width: 400px)") {
+			margin-left: 130px;
+		}
 	}
 	&__title {
 
 	}
 	&__description {
-		//font-size: em-calc(15px);
+		display: none;
 		opacity: .54;
+		@include mq("(min-width: 400px)") {
+			display: block;
+		}
 	}
 	&__request {
 		width: 85px;
@@ -85,7 +100,32 @@
 			opacity: .56;
 		}
 		&__icon {
-
+			@include icon-plus(30px, #fff);
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+		}
+		&__label {
+			display: block;
+			margin-top: 4px;
+		}
+	}
+	&__empty {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		width: 100%;
+		height: calc(100vh - 50px);
+		padding: 20px;
+		text-align: center;
+		&__icon {
+			@include icon-search(80px, #fff);
+			display: inline-block;
+			width: 80px;
+			height: 80px;
+			margin-bottom: 8px;
+			opacity: .56;
 		}
 	}
 }

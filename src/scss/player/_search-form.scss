@@ -1,0 +1,38 @@
+.search-form {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: center;
+	align-items: stretch;
+	height: 50px;
+	&__input,
+	&__service,
+	&__submit {
+		color: inherit;
+		border: none;
+		border-radius: 0;
+		background: none;
+		font-family: inherit;
+		font-size: inherit;
+		&:focus {
+			outline: none;
+		}
+	}
+	&__input,
+	&__service {
+		padding: 5px 10px;
+		color: #212121;
+		background-color: #fff;
+		-webkit-appearance: none;
+	}
+	&__input {
+		width: 75%;
+	}
+	&__service {
+		display: none;
+	}
+	&__submit {
+		width: 25%;
+		background-color: palette(severn, darkest);
+	}
+}

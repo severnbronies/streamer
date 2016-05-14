@@ -9,7 +9,9 @@
 		padding: 20px;
 		overflow: auto;
 		@include mq(tweetHoriz) {
-			flex-direction: row;
+			body:not(.stream-collapsed) & { 
+				flex-direction: row;
+			}
 		}
 	}
 	&__item {
@@ -21,8 +23,10 @@
 		&:nth-child(n+2) {
 			margin-top: 20px;
 			@include mq(tweetHoriz) {
-				margin-top: 0;
-				margin-left: 20px;
+				body:not(.stream-collapsed) & {
+					margin-top: 0;
+					margin-left: 20px;
+				}
 			}
 		}
 	}
@@ -50,12 +54,15 @@
 		}
 	}
 	&__body {
+		display: inline-block;
 		min-height: 48px;
 		padding: 10px;
 		background-color: #fff;
 		font-size: em-calc(15px);
 		@include mq(tweetHoriz) {
-			display: inline-block;
+			body:not(.stream-collapsed) & { 
+				display: block;
+			}
 		}
 	}
 	&__content {

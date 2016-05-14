@@ -1,12 +1,28 @@
 .requests {
+	padding-top: 50px;
 	&__form {
-
+		position: fixed;
+		top: 0;
+		right: 0;
+		left: 0;
+		z-index: 1;
 	}
 	&__results {
 		list-style: none;
 		border-bottom: 1px solid palette(severn, darkest);
 	}
 	&__more {
-
+		width: 100%;
+		height: 100px;
+		color: inherit;
+		border: none;
+		border-radius: 0;
+		background: none;
+		font-family: inherit;
+		font-size: inherit;
+		background-color: palette(severn, darkest);
+		&:focus {
+			outline: none;
+		}
 	}
 }

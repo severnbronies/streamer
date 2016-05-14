@@ -6,26 +6,24 @@
 	<script src="https://use.typekit.net/rvj6shm.js"></script>
 	<script>try{Typekit.load({ async: true });}catch(e){}</script>
 	<link rel="stylesheet" href="/dst/css/player.css">
-	<title>Request a Video</title>
+	<title>Request a video</title>
 </head>
 <body class="requests">
 
-	<form id="search" class="form requests__form">
-		<div class="form__row">
-			<div class="form__control">
-				<input class="form__input" name="search" type="search" placeholder="Search YouTube"/>
-			</div>
-			<button type="submit" class="form__submit">Search</button>
-		</div>
-		<select name="service" style="display:none;">
-			<option value="youtube" selected>Youtube</option>
+	<form id="search" class="search-form requests__form">
+		<input class="search-form__input" name="search" type="search" placeholder="Search YouTube"/>
+		<select class="search-form__service" name="service">
+			<option value="youtube" selected>YouTube</option>
 		</select>
+		<button class="search-form__submit" type="submit">Search</button>
 	</form>
 	<ul class="results requests__results">
-		
+		<li class="results__empty">
+			<span class="results__empty__icon"></span>
+			There's nothing here yet! Tap the search bar up top and find something cool to share with the meet!
+		</li>
 	</ul>
-	<button class="requests__more" id="more" type="button">Load More</button>
-
+	<button class="requests__more" id="more" type="button" style="display:none;">Load more&hellip;</button>
 
 	<script type="text/html" id="tmpl-result">
 		<li class="results__item" data-result="{{jsonData}}" tabindex="0">
@@ -38,7 +36,7 @@
 			</div>
 			<button class="results__request" type="button" tabindex="-1" data-result-request>
 				<span class="results__request__icon"></span>
-				Request
+				<span class="results__request__label">Request</span>
 			</button>
 		</li>
 	</script>
