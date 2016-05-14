@@ -39,11 +39,19 @@ app.admin = function() {
  		});
 	};
 	this.bindSockets = function() {
-		console.log("BIND SOCKETS")
+		console.log("BIND SOCKETS");
 		globalSocket.on("command", function(cmd, params) {
 			switch(cmd) {
 				case "playerNewRequest":
-					console.log("new song", params);
+					console.log("new video", params);
+					var template = $("#tmpl-result").html();
+					params.jsonData = JSON.stringify(params);
+					$("[data-ponydrome-queue]").append(Mustache.render(template, params));
+					break;
+				case "playerPlayVideo":
+					console.log("playing video", params);
+					$("[data-ponydrome-queue]").find(".results__item").removeClass("results__item--current");
+					$("[data-ponydrome-queue]").find("#" + params.id).addClass("results__item--current");
 					break;
 			}
 		});

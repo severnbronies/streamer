@@ -1,0 +1,83 @@
+.results {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	&__item {
+		width: 100%;
+		overflow: hidden;
+		position: relative;
+		padding: 10px;
+		border-width: 0;
+		border-style: solid;
+		border-color: #ddd;
+		border-top-width: 1px;
+		cursor: pointer;
+		transition: background-color .5s $animation-easing;
+		@include mq("(min-width: 700px)") {
+			width: 50%;
+			&:nth-child(2n+1) {
+				border-right-width: 1px;
+			}
+		}
+		&--current {
+			color: #fff;
+			background-color: #3adb76;
+		}
+	}
+	&__media {
+		width: 80px;
+		margin-right: 10px;
+		float: left;
+		line-height: none;
+		@include mq("(min-width: 400px)") {
+			width: 120px;
+		}
+	}
+	&__thumbnail {
+		width: 100%;
+	}
+	&__body {
+		margin-left: 90px;
+		@include mq("(min-width: 400px)") {
+			margin-left: 130px;
+		}
+	}
+	&__title {
+
+	}
+	&__description {
+		display: none;
+		opacity: .54;
+		@include mq("(min-width: 400px)") {
+			display: block;
+		}
+	}
+	&__request {
+		width: 85px;
+		position: absolute;
+		top: 0;
+		left: 100%;
+		bottom: 0;
+		cursor: pointer;
+		font-family: inherit;
+		font-size: em-calc(12px);
+		text-align: center;
+		border: none;
+		color: #fff;
+		background: none;
+		background-color: palette(severn, darkest);
+		&[disabled] {
+			opacity: .56;
+		}
+		&__icon {
+			@include icon-plus(30px, #fff);
+			display: inline-block;
+			width: 30px;
+			height: 30px;
+		}
+		&__label {
+			display: block;
+			margin-top: 4px;
+		}
+	}
+}

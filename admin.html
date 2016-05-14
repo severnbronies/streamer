@@ -50,8 +50,10 @@
 		</section>
 	</section>
 	<section class="admin__section" id="player">
-		<h1 class="admin__title">Ponydrome moderation</h1>
-		
+		<h1 class="admin__title">Ponydrome queue</h1>
+		<ul class="results" data-ponydrome-queue>
+			
+		</ul>
 	</section>
 	<section class="admin__section" id="alerts">
 		<h1 class="admin__title">Alerts</h1>
@@ -76,6 +78,19 @@
 			</form>
 		</section>
 	</section>
+
+	<script type="text/html" id="tmpl-result">
+		<li class="results__item" data-result="{{jsonData}}" tabindex="0" id="{{id}}">
+			<div class="results__media">
+				<img class="results__thumbnail" src="{{thumbnail}}" alt="{{title}}">
+			</div>
+			<div class="results__body">
+				<h1 class="results__title">{{title}}</h1>
+				<div class="content results__description">{{description}}</div>
+			</div>
+		</li>
+	</script>
+
 	<script src="/adminKey"></script>
 	<script src="/dst/js/admin.js"></script>
 	<script>
