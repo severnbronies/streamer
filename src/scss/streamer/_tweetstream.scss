@@ -75,7 +75,7 @@
 	}
 	&__user {
 		&::after {
-			content: " // ";
+			content: " \00B7 ";
 		}
 	}
 	&__timestamp {

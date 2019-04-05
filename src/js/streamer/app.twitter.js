@@ -28,7 +28,7 @@ app.twitter = function() {
 		var tweetReminder = {
 			automated: true,
 			created_at: new Date().toISOString(),
-			text: "Any tweets mentioning @SevernBronies or containing the hashtag #6Severn will appear here. Go on! Tweet! Do it now!",
+			text: "Any tweets mentioning @SevernBronies or containing the hashtag #SBSeason9 will appear here. Go on! Tweet! Do it now!",
 			user: {
 				screen_name: "SevernBronies"
 			}
